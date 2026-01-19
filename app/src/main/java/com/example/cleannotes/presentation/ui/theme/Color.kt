@@ -1,4 +1,4 @@
-package com.example.cleannotes.ui.theme
+package com.example.cleannotes.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
