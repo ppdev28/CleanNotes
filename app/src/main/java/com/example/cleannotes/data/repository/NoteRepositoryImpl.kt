@@ -22,6 +22,8 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun insertNote(note: Note) {
+        // Aquí dao.insertNote devuelve un Long, pero como esta función devuelve Unit,
+        // Kotlin simplemente ignora el Long. ¡Esto es correcto!
         dao.insertNote(note.toNoteEntity())
     }
 

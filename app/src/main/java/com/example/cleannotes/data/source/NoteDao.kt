@@ -16,9 +16,11 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE id = :id")
     suspend fun getNoteById(id: Int): NoteEntity?
 
+    // CAMBIO 1: Ahora devuelve Long (el ID de la fila insertada)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note: NoteEntity)
+    suspend fun insertNote(note: NoteEntity): Long
 
+    // CAMBIO 2: Ahora devuelve Int (el número de filas borradas)
     @Delete
-    suspend fun deleteNote(note: NoteEntity)
+    suspend fun deleteNote(note: NoteEntity): Int
 }

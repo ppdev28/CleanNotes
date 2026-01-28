@@ -1,77 +1,121 @@
 package com.example.cleannotes.presentation.notes.components
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.clipPath
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.cleannotes.domain.model.Note
+import com.example.cleannotes.presentation.util.DateUtils
 
 @Composable
 fun NoteItem(
     note: Note,
     modifier: Modifier = Modifier,
-    cornerRadius: Dp = 10.dp,
-    cutCornerSize: Dp = 30.dp, // El pequeño doblez de la esquina (estilo post-it)
-    onDeleteClick: () -> Unit
+    // Un parámetro visual para simular el estilo "Seleccionado" (Negro) o normal (Gris)
+    isToday: Boolean = true,
+    onClick: () -> Unit
 ) {
-    Box(
+    Row(
         modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp, horizontal = 16.dp)
+            .clickable { onClick() },
+        verticalAlignment = Alignment.Top // Alineamos arriba como en la foto
     ) {
-        // Dibujamos el fondo personalizado con Canvas para hacer el efecto de página doblada
-        // O usamos una Card simple si prefieres el estilo iOS moderno plano.
-        // Vamos con estilo iOS moderno (Card simple y limpia):
-
-        Card(
-            shape = MaterialTheme.shapes.medium, // Bordes redondeados
-            colors = CardDefaults.cardColors(containerColor = Color(note.color)),
-            modifier = Modifier.fillMaxWidth()
+        // --- COLUMNA 1: FECHA (Burbuja) ---
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(end = 16.dp)
         ) {
-            Column(
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+                    .size(50.dp) // Tamaño del círculo
+                    .clip(CircleShape)
+                    .background(if (isToday) Color.Black else Color(0xFFE0E0E0))
             ) {
-                Text(
-                    text = note.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.Black,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = note.content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.DarkGray,
-                    maxLines = 10,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = DateUtils.getDayNumber(note.timestamp),
+                        color = if (isToday) Color.White else Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                    Text(
+                        text = DateUtils.getMonthName(note.timestamp),
+                        color = if (isToday) Color.White else Color.Black,
+                        fontSize = 10.sp
+                    )
+                }
             }
         }
 
-        // Botón de borrar (oculto o visible según diseño, aquí lo pondremos flotando pequeño)
-        IconButton(
-            onClick = onDeleteClick,
-            modifier = Modifier.align(Alignment.BottomEnd)
+        // --- COLUMNA 2: CONTENIDO ---
+        Column(
+            modifier = Modifier.weight(1f)
         ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Delete note",
-                tint = Color.DarkGray
+            // Hora
+            Text(
+                text = "${DateUtils.getTime(note.timestamp)} - 2:00 PM", // Hora hardcodeada final por ahora
+                fontSize = 12.sp,
+                color = Color.Gray
             )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            // Título
+            Text(
+                text = note.title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Chips / Etiquetas (Simulados con el color de la nota)
+            Row {
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = Color(0xFFE0E0E0), // Gris claro de fondo
+                    modifier = Modifier.height(24.dp)
+                ) {
+                    Text(
+                        text = "PERSONAL", // Texto dummy o podrías usar note.content corto
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            }
         }
+
+        // --- COLUMNA 3: AVATAR (Simulado) ---
+        // En la imagen hay fotos, aquí usaremos un círculo de color por ahora
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .background(Color.Gray) // Placeholder de imagen
+        )
     }
 }
