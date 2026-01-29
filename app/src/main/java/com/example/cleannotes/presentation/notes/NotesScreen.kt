@@ -15,11 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -36,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.cleannotes.presentation.notes.components.HomeBottomBar
 import com.example.cleannotes.presentation.notes.components.NoteItem
 
 @Composable
@@ -46,45 +43,30 @@ fun NotesScreen(
     val state by viewModel.state.collectAsState()
 
     Scaffold(
-        containerColor = Color.White, // Fondo blanco puro como en la imagen
-        floatingActionButton = {
-            // Fila de botones flotantes inferiores
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Botón izquierdo (Menú / Notas)
-                FloatingActionButton(
-                    onClick = { /* Acción futura */ },
-                    containerColor = Color(0xFF1F1F1F), // Negro casi puro
-                    contentColor = Color.White,
-                    shape = CircleShape,
-                    modifier = Modifier.size(64.dp)
-                ) {
-                    Icon(imageVector = Icons.Rounded.Menu, contentDescription = "Menu")
-                }
+        containerColor = Color(0xFFF8F8F8),
+        // Eliminamos el 'floatingActionButton' antiguo
 
-                // Botón derecho (Notificaciones / Añadir)
-                // Lo usaremos como el botón de AÑADIR NOTA por ahora para que sea funcional
-                FloatingActionButton(
-                    onClick = { navController.navigate("add_edit_note") }, // Navegar a crear
-                    containerColor = Color(0xFF1F1F1F),
-                    contentColor = Color.White,
-                    shape = CircleShape,
-                    modifier = Modifier.size(64.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add Note")
-                }
+        // Usamos bottomBar para la barra de escritura
+        bottomBar = {
+            // Añadimos un poco de padding abajo para que no pegue con el borde de la pantalla (gestos)
+            // y ponemos el fondo blanco para tapar la lista cuando hace scroll
+            Box(
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(bottom = 16.dp)
+            ) {
+                HomeBottomBar(
+                    onQuickAdd = { text, isReminder ->
+                        viewModel.onQuickAdd(text, isReminder)
+                    }
+                )
             }
-        },
-        floatingActionButtonPosition = FabPosition.Center
+        }
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(padding) // Esto asegura que la lista no quede tapada por la barra
         ) {
             // --- CABECERA ---
             Row(
@@ -94,7 +76,6 @@ fun NotesScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Título grande
                 Text(
                     text = "Notas de hoy",
                     fontSize = 32.sp,
@@ -102,7 +83,6 @@ fun NotesScreen(
                     color = Color.Black
                 )
 
-                // Imagen de perfil (Placeholder)
                 Box(
                     modifier = Modifier
                         .size(40.dp)
@@ -121,11 +101,10 @@ fun NotesScreen(
 
             // --- LISTA DE NOTAS ---
             LazyColumn(
-                contentPadding = PaddingValues(bottom = 100.dp) // Espacio para los botones flotantes
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 20.dp)
             ) {
                 items(state.notes) { note ->
-                    // Lógica visual simple: Si es la primera nota, la marcamos como "seleccionada" (negra)
-                    // Solo para imitar el diseño visual por ahora
                     val isFirst = state.notes.firstOrNull() == note
 
                     NoteItem(
@@ -136,9 +115,8 @@ fun NotesScreen(
                         }
                     )
 
-                    // Línea separadora sutil
                     HorizontalDivider(
-                        modifier = Modifier.padding(start = 80.dp), // Indentada a la derecha
+                        modifier = Modifier.padding(start = 80.dp),
                         thickness = 0.5.dp,
                         color = Color.LightGray.copy(alpha = 0.5f)
                     )
