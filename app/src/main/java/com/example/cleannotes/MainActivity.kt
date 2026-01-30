@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.cleannotes.presentation.notes.AllNotesScreen
 import com.example.cleannotes.presentation.notes.NotesScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,13 +27,15 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = "notes_screen"
+                        startDestination = "all_notes_screen"
                     ) {
                         // Pantalla Home
                         composable(route = "notes_screen") {
                             NotesScreen(navController = navController)
                         }
-
+                        composable(route = "all_notes_screen") {
+                            AllNotesScreen(navController = navController)
+                        }
                         // Pantalla Añadir/Editar
                         // Aceptamos un argumento opcional ?noteId={noteId}
                         composable(
