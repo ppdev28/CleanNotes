@@ -47,7 +47,6 @@ class NotesViewModel @Inject constructor(
     }
 
     // --- NUEVA FUNCIÓN PARA LA BARRA RÁPIDA ---
-    // --- FUNCIÓN DE AÑADIR RÁPIDO CORREGIDA ---
     fun onQuickAdd(text: String, isReminder: Boolean) {
         viewModelScope.launch {
             if (text.isBlank()) return@launch
@@ -59,7 +58,7 @@ class NotesViewModel @Inject constructor(
 
             val newNote = Note(
                 title = text,
-                content = if (isReminder) "Recordatorio" else "", // Texto auxiliar opcional
+                content = if (isReminder) "Remember" else "To Note", // Texto auxiliar opcional
                 timestamp = System.currentTimeMillis(),
                 color = color
             )

@@ -5,14 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.cleannotes.presentation.notes.AddEditNoteScreen
 import com.example.cleannotes.presentation.notes.AllNotesScreen
+import com.example.cleannotes.presentation.notes.AllRemindersScreen
 import com.example.cleannotes.presentation.notes.NotesScreen
+import com.example.cleannotes.presentation.ui.theme.CleanNotesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -21,21 +23,25 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
+            CleanNotesTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
 
                     NavHost(
                         navController = navController,
-                        startDestination = "all_notes_screen"
+                        startDestination = "notes_screen"
                     ) {
-                        // Pantalla Home
+                        // Home Screen
                         composable(route = "notes_screen") {
                             NotesScreen(navController = navController)
                         }
                         composable(route = "all_notes_screen") {
                             AllNotesScreen(navController = navController)
                         }
+                        composable(route = "all_reminders_screen") {
+                            AllRemindersScreen(navController = navController)
+                        }
+
                         // Pantalla Añadir/Editar
                         // Aceptamos un argumento opcional ?noteId={noteId}
                         composable(
@@ -47,9 +53,14 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         ) {
-                            // Por ahora pondremos un texto simple hasta que diseñemos esta pantalla
-                            // Lo haremos en el siguiente paso, pero para que no crashee:
-                            Text("Pantalla de Edición (En construcción)")
+                            // Obtenemos el color si lo pasamos (o -1 si no)
+                            val color = it.arguments?.getInt("noteColor") ?: -1
+
+                            // ¡AQUÍ LLAMAMOS A LA PANTALLA REAL!
+                            AddEditNoteScreen(
+                                navController = navController,
+                                noteColor = color
+                            )
                         }
                     }
                 }
