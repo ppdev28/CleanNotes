@@ -1,4 +1,4 @@
-package com.example.cleannotes.presentation.notes.components
+package com.example.cleannotes.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

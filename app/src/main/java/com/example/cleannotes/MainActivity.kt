@@ -10,10 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.cleannotes.presentation.notes.AddEditNoteScreen
-import com.example.cleannotes.presentation.notes.AllNotesScreen
-import com.example.cleannotes.presentation.notes.AllRemindersScreen
-import com.example.cleannotes.presentation.notes.NotesScreen
+import com.example.cleannotes.presentation.ui.edit_note.AddEditNoteScreen
+import com.example.cleannotes.presentation.ui.all_notes.AllNotesScreen
+import com.example.cleannotes.presentation.ui.all_reminders.AllRemindersScreen
+import com.example.cleannotes.presentation.ui.home.NotesScreen
 import com.example.cleannotes.presentation.ui.theme.CleanNotesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,13 +53,10 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         ) {
-                            // Obtenemos el color si lo pasamos (o -1 si no)
-                            val color = it.arguments?.getInt("noteColor") ?: -1
 
                             // ¡AQUÍ LLAMAMOS A LA PANTALLA REAL!
                             AddEditNoteScreen(
-                                navController = navController,
-                                noteColor = color
+                                navController = navController
                             )
                         }
                     }

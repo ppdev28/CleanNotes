@@ -1,4 +1,4 @@
-package com.example.cleannotes.presentation.notes
+package com.example.cleannotes.presentation.ui
 
 import com.example.cleannotes.domain.model.Note
 

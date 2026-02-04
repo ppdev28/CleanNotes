@@ -1,4 +1,4 @@
-package com.example.cleannotes.presentation.notes
+package com.example.cleannotes.presentation.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -59,8 +59,7 @@ class NotesViewModel @Inject constructor(
             val newNote = Note(
                 title = text,
                 content = if (isReminder) "Remember" else "To Note", // Texto auxiliar opcional
-                timestamp = System.currentTimeMillis(),
-                color = color
+                timestamp = System.currentTimeMillis()
             )
 
             try {

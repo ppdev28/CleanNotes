@@ -1,12 +1,22 @@
-package com.example.cleannotes.presentation.notes
+package com.example.cleannotes.presentation.ui.all_reminders
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.StickyNote2
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,11 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.cleannotes.presentation.components.BottomNavigationBar
-import com.example.cleannotes.presentation.notes.components.SimpleNoteItem
+import com.example.cleannotes.presentation.ui.NotesViewModel
+import com.example.cleannotes.presentation.ui.components.BottomNavigationBar
+import com.example.cleannotes.presentation.ui.components.SimpleNoteItem
 
 @Composable
-fun AllNotesScreen(
+fun AllRemindersScreen(
     navController: NavController,
     viewModel: NotesViewModel = hiltViewModel() // Reutilizamos el mismo VM
 ) {
@@ -41,16 +52,16 @@ fun AllNotesScreen(
                 // Fila superior: Icono + Clean Notes
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Outlined.StickyNote2, // Icono tipo nota/cuadrado
+                        imageVector = Icons.Filled.Notifications, // Icono tipo notificación
                         contentDescription = "Logo",
-                        modifier = Modifier.size(32.dp),
+                        modifier = Modifier.size(28.dp),
                         tint = Color.Black
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Clean Notes",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
+                        fontSize = 24.sp,
                         color = Color.Black
                     )
                 }
@@ -66,13 +77,13 @@ fun AllNotesScreen(
                 .padding(padding)
                 .padding(horizontal = 16.dp)
         ) {
-            // Título Grande "Notas"
+            // Título Grande "Recordatorio"
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Notas",
-                fontSize = 28.sp,
+                text = "Recordatorios",
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = Color.Black,
             )
             Spacer(modifier = Modifier.height(16.dp))
 

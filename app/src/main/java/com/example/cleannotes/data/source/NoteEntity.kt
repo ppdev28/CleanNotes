@@ -9,8 +9,7 @@ data class NoteEntity(
     @PrimaryKey val id: Int? = null,
     val title: String,
     val content: String,
-    val timestamp: Long,
-    val color: Int
+    val timestamp: Long
 ) {
     // Mapper: Entity -> Domain
     fun toNote(): Note {
@@ -18,8 +17,7 @@ data class NoteEntity(
             id = id,
             title = title,
             content = content,
-            timestamp = timestamp,
-            color = color
+            timestamp = timestamp
         )
     }
 }
@@ -30,7 +28,6 @@ fun Note.toNoteEntity(): NoteEntity {
         id = id,
         title = title,
         content = content,
-        timestamp = timestamp,
-        color = color
+        timestamp = timestamp
     )
 }

@@ -1,7 +1,6 @@
-package com.example.cleannotes.presentation.notes
+package com.example.cleannotes.presentation.ui.edit_note
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -30,10 +29,6 @@ class AddEditNoteViewModel @Inject constructor(
     private val _noteContent = mutableStateOf("")
     val noteContent: State<String> = _noteContent
 
-    // Color por defecto random o uno fijo
-    private val _noteColor = mutableIntStateOf(Note.colors.random())
-    val noteColor: State<Int> = _noteColor
-
     // EVENTOS: Para avisar a la UI (ej: "Guardado OK" o "Error")
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -49,7 +44,6 @@ class AddEditNoteViewModel @Inject constructor(
                         currentNoteId = note?.id
                         _noteTitle.value = note?.title.toString()
                         _noteContent.value = note?.content.toString()
-                        _noteColor.intValue = note?.color!!
                     }
                 }
             }
@@ -65,10 +59,6 @@ class AddEditNoteViewModel @Inject constructor(
         _noteContent.value = text
     }
 
-    fun onColorChange(color: Int) {
-        _noteColor.intValue = color
-    }
-
     fun saveNote() {
         viewModelScope.launch {
             try {
@@ -77,7 +67,6 @@ class AddEditNoteViewModel @Inject constructor(
                         title = noteTitle.value,
                         content = noteContent.value,
                         timestamp = System.currentTimeMillis(),
-                        color = noteColor.value,
                         id = currentNoteId
                     )
                 )

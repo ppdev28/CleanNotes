@@ -1,4 +1,4 @@
-package com.example.cleannotes.presentation.notes
+package com.example.cleannotes.presentation.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,8 +30,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.cleannotes.presentation.notes.components.HomeBottomBar
-import com.example.cleannotes.presentation.notes.components.NoteItem
+import com.example.cleannotes.presentation.ui.NotesViewModel
+import com.example.cleannotes.presentation.ui.components.HomeBottomBar
+import com.example.cleannotes.presentation.ui.components.NoteItem
 
 @Composable
 fun NotesScreen(

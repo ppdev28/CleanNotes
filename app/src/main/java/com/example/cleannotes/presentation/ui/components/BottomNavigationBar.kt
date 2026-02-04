@@ -1,4 +1,4 @@
-package com.example.cleannotes.presentation.components
+package com.example.cleannotes.presentation.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
