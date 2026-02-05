@@ -20,10 +20,10 @@ object AppModule {
     @Singleton
     fun provideNoteDatabase(app: Application): NoteDatabase {
         return Room.databaseBuilder(
-            app,
-            NoteDatabase::class.java,
-            NoteDatabase.DATABASE_NAME
-        ).build()
+                app,
+                NoteDatabase::class.java,
+                NoteDatabase.DATABASE_NAME
+            ).fallbackToDestructiveMigration(false).build()
     }
 
     @Provides
