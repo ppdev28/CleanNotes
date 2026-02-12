@@ -34,70 +34,70 @@ import com.example.cleannotes.presentation.ui.components.SimpleNoteItem
 
 @Composable
 fun AllRemindersScreen(
-    navController: NavController,
-    viewModel: NotesViewModel = hiltViewModel() // Reutilizamos el mismo VM
+	navController: NavController,
+	viewModel: NotesViewModel = hiltViewModel() // Reutilizamos el mismo VM
 ) {
-    val state by viewModel.state.collectAsState()
-
-    Scaffold(
-        containerColor = Color(0xFFF8F8F8), // Un gris muy suave de fondo para que resalten las cards blancas
-        topBar = {
-            // Top Bar Personalizada según la imagen
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                // Fila superior: Icono + Clean Notes
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Filled.Notifications, // Icono tipo notificación
-                        contentDescription = "Logo",
-                        modifier = Modifier.size(28.dp),
-                        tint = Color.Black
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Clean Notes",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
-                        color = Color.Black
-                    )
-                }
-            }
-        },
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 16.dp)
-        ) {
-            // Título Grande "Recordatorio"
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Recordatorios",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Lista de Notas
-            LazyColumn {
-                items(state.notes) { note ->
-                    SimpleNoteItem(
-                        note = note,
-                        onClick = {
-                            navController.navigate("add_edit_note?noteId=${note.id}")
-                        }
-                    )
-                }
-            }
-        }
-    }
+	val state by viewModel.state.collectAsState()
+	
+	Scaffold(
+		containerColor = Color(0xFFF8F8F8), // Un gris muy suave de fondo para que resalten las cards blancas
+		topBar = {
+			// Top Bar Personalizada según la imagen
+			Column(
+				modifier = Modifier
+					.fillMaxWidth()
+					.background(Color.White)
+					.padding(horizontal = 16.dp, vertical = 12.dp)
+			) {
+				// Fila superior: Icono + Clean Notes
+				Row(verticalAlignment = Alignment.CenterVertically) {
+					Icon(
+						imageVector = Icons.Filled.Notifications, // Icono tipo notificación
+						contentDescription = "Logo",
+						modifier = Modifier.size(28.dp),
+						tint = Color.Black
+					)
+					Spacer(modifier = Modifier.width(8.dp))
+					Text(
+						text = "Clean Notes",
+						fontWeight = FontWeight.Bold,
+						fontSize = 24.sp,
+						color = Color.Black
+					)
+				}
+			}
+		},
+		bottomBar = {
+			BottomNavigationBar(navController = navController)
+		}
+	) { padding ->
+		Column(
+			modifier = Modifier
+				.fillMaxSize()
+				.padding(padding)
+				.padding(horizontal = 16.dp)
+		) {
+			// Título Grande "Recordatorio"
+			Spacer(modifier = Modifier.height(16.dp))
+			Text(
+				text = "Recordatorios",
+				fontSize = 32.sp,
+				fontWeight = FontWeight.Bold,
+				color = Color.Black,
+			)
+			Spacer(modifier = Modifier.height(16.dp))
+			
+			// Lista de Notas
+			LazyColumn {
+				items(state.notes) { note ->
+					SimpleNoteItem(
+						note = note,
+						onClick = {
+							navController.navigate("add_edit_note?noteId=${note.id}")
+						}
+					)
+				}
+			}
+		}
+	}
 }
