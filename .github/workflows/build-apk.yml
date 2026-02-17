@@ -1,0 +1,39 @@
+# Build and Release APK Workflow
+
+name: Build and Release APK
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Build APK
+        run: |
+          ./gradlew assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release.apk
+          path: app/build/outputs/apk/release/app-release.apk
+
+      - name: Release APK
+        uses: softprops/action-gh-release@v1
+        with:
+          tag: v\${{ github.sha }}
+          files: app/build/outputs/apk/release/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
