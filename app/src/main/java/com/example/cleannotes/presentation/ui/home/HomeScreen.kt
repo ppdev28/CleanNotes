@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,11 +32,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.cleannotes.presentation.ui.NotesViewModel
+import com.example.cleannotes.presentation.ui.home.viewmodel.NotesViewModel
 import com.example.cleannotes.presentation.ui.components.HomeBottomBar
-import com.example.cleannotes.presentation.ui.components.NoteItem
 import androidx.navigation.compose.rememberNavController
 import com.example.cleannotes.domain.model.Note
+import com.example.cleannotes.presentation.ui.components.HomeNoteItem
+
 @Composable
 fun HomeScreen(
 	navController: NavController,
@@ -44,7 +46,7 @@ fun HomeScreen(
 	val state by viewModel.state.collectAsState()
 	
 	Scaffold(
-		containerColor = Color(0xFFF8F8F8),
+		containerColor = MaterialTheme.colorScheme.background,
 		// Eliminamos el 'floatingActionButton' antiguo
 		
 		// Usamos bottomBar para la barra de escritura
@@ -53,7 +55,7 @@ fun HomeScreen(
 			// y ponemos el fondo blanco para tapar la lista cuando hace scroll
 			Box(
 				modifier = Modifier
-					.background(Color(0xFFF8F8F8))
+					.background(MaterialTheme.colorScheme.background)
 					.padding(bottom = 16.dp)
 			) {
 				HomeBottomBar(
@@ -106,7 +108,7 @@ fun HomeScreen(
 				items(state.notes) { note ->
 					val isFirst = state.notes.firstOrNull() == note
 					
-					NoteItem(
+					HomeNoteItem(
 						note = note,
 						isToday = isFirst,
 						onClick = {
@@ -177,8 +179,7 @@ fun HomeScreenPreview() {
 				verticalAlignment = Alignment.CenterVertically
 			) {
 				Text(
-					text = "NOTAS DE HOY",
-					color = Color.Black,
+					text = "NOTAS DE HOY"
 				)
 				
 				Box(
@@ -205,7 +206,7 @@ fun HomeScreenPreview() {
 				items(notes) { note ->
 					val isFirst = notes.firstOrNull() == note
 					
-					NoteItem(
+					HomeNoteItem(
 						note = note,
 						isToday = isFirst,
 						onClick = {

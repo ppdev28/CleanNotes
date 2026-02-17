@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.cleannotes.presentation.ui.edit_note.AddEditNoteScreen
+import com.example.cleannotes.presentation.ui.edit_note.EditNoteScreen
 import com.example.cleannotes.presentation.ui.all_notes.AllNotesScreen
 import com.example.cleannotes.presentation.ui.all_reminders.AllRemindersScreen
 import com.example.cleannotes.presentation.ui.theme.CleanNotesTheme
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
 						) {
 							
 							// ¡AQUÍ LLAMAMOS A LA PANTALLA REAL!
-							AddEditNoteScreen(
+							EditNoteScreen(
 								navController = navController
 							)
 						}

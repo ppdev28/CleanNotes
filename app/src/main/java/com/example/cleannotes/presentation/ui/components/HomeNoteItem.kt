@@ -26,7 +26,7 @@ import com.example.cleannotes.domain.model.Note
 import com.example.cleannotes.presentation.util.DateUtils
 
 @Composable
-fun NoteItem(
+fun HomeNoteItem(
 	note: Note,
 	modifier: Modifier = Modifier,
 	// Un parámetro visual para simular el estilo "Seleccionado" (Negro) o normal (Gris)
@@ -74,7 +74,7 @@ fun NoteItem(
 		) {
 			// Hora
 			Text(
-				text = "${DateUtils.getTime(note.timestamp)} - 2:00 PM", // Hora hardcodeada final por ahora
+				text = DateUtils.getTime(note.timestamp), // Hora hardcodeada final por ahora
 				fontSize = 12.sp,
 				color = Color.Gray
 			)
