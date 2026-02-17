@@ -1,11 +1,16 @@
 package com.example.cleannotes.presentation.ui.theme
-
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Light Theme - Earthy Greens & Grays
+val EarthyGreen = Color(0xFF556B2F)
+val StoneGray = Color(0xFF8D8D8D)
+val MutedClay = Color(0xFFBCAAA4)
+val OffWhiteBG = Color(0xFFFCFCFC)
+val DarkCharcoalText = Color(0xFF2E2E2E)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+// Dark Theme - Earthy Greens & Grays
+val SoftSage = Color(0xFF8FBC8F)
+val MediumGray = Color(0xFF4A4A4A)
+val WarmGray = Color(0xFF797979)
+val NearBlackBG = Color(0xFF1B1B1B)
+val OffWhiteText = Color(0xFFE5E5E5)

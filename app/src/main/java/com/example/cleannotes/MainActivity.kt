@@ -53,7 +53,6 @@ class MainActivity : ComponentActivity() {
 								}
 							)
 						) {
-							
 							// ¡AQUÍ LLAMAMOS A LA PANTALLA REAL!
 							EditNoteScreen(
 								navController = navController

@@ -21,17 +21,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.cleannotes.presentation.ui.edit_note.viewmodel.AddEditNoteViewModel
+import com.example.cleannotes.presentation.ui.edit_note.viewmodel.EditNoteViewModel
 import com.example.cleannotes.presentation.ui.theme.CleanNotesTheme
 
 @Composable
 fun EditNoteScreen(
 	navController: NavController,
-	viewModel: AddEditNoteViewModel = hiltViewModel()
+	viewModel: EditNoteViewModel = hiltViewModel()
 ) {
 	val titleState = viewModel.noteTitle.value
 	val contentState = viewModel.noteContent.value
-	
+
 	CleanNotesTheme {
 		Scaffold(
 			topBar = {
@@ -55,8 +55,8 @@ fun EditNoteScreen(
 			EditNoteContent(
 				title = titleState,
 				content = contentState,
-				onTitleChange = { viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it)) },
-				onContentChange = { viewModel.onEvent(AddEditNoteEvent.EnteredContent(it)) },
+				onTitleChange = { viewModel.onEvent(EditNoteEvent.EnteredTitle(it)) },
+				onContentChange = { viewModel.onEvent(EditNoteEvent.EnteredContent(it)) },
 				modifier = Modifier.padding(padding)
 			)
 		}

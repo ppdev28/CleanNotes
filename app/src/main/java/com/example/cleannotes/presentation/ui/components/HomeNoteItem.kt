@@ -1,7 +1,6 @@
 package com.example.cleannotes.presentation.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,86 +28,96 @@ import androidx.compose.ui.unit.sp
 import com.example.cleannotes.domain.model.Note
 import com.example.cleannotes.presentation.util.DateUtils
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNoteItem(
 	note: Note,
 	modifier: Modifier = Modifier,
-	// Un parámetro visual para simular el estilo "Seleccionado" (Negro) o normal (Gris)
 	isToday: Boolean = true,
 	onClick: () -> Unit
 ) {
-	Row(
+	Card(
 		modifier = modifier
 			.fillMaxWidth()
-			.padding(vertical = 12.dp, horizontal = 16.dp)
-			.clickable { onClick() },
-		verticalAlignment = Alignment.Top // Alineamos arriba como en la foto
+			.padding(horizontal = 16.dp, vertical = 8.dp),
+		elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+		shape = RoundedCornerShape(12.dp),
+		onClick = onClick,
+		colors = CardDefaults.cardColors(
+			containerColor = MaterialTheme.colorScheme.surface
+		)
 	) {
-		// --- COLUMNA 1: FECHA (Burbuja) ---
-		Column(
-			horizontalAlignment = Alignment.CenterHorizontally,
-			modifier = Modifier.padding(end = 16.dp)
+		Row(
+			modifier = Modifier.padding(16.dp),
+			verticalAlignment = Alignment.Top
 		) {
-			Box(
-				contentAlignment = Alignment.Center,
-				modifier = Modifier
-					.size(50.dp) // Tamaño del círculo
-					.clip(CircleShape)
-					.background(if (isToday) Color.Black else Color(0xFFE0E0E0))
+			// --- COLUMNA 1: FECHA (Burbuja) ---
+			Column(
+				horizontalAlignment = Alignment.CenterHorizontally,
+				modifier = Modifier.padding(end = 16.dp)
 			) {
-				Column(horizontalAlignment = Alignment.CenterHorizontally) {
-					Text(
-						text = DateUtils.getDayNumber(note.timestamp),
-						color = if (isToday) Color.White else Color.Black,
-						fontWeight = FontWeight.Bold,
-						fontSize = 18.sp
-					)
-					Text(
-						text = DateUtils.getMonthName(note.timestamp),
-						color = if (isToday) Color.White else Color.Black,
-						fontSize = 10.sp
-					)
+				Box(
+					contentAlignment = Alignment.Center,
+					modifier = Modifier
+						.size(50.dp)
+						.clip(CircleShape)
+						.background(if (isToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+				) {
+					Column(horizontalAlignment = Alignment.CenterHorizontally) {
+						Text(
+							text = DateUtils.getDayNumber(note.timestamp),
+							color = MaterialTheme.colorScheme.onPrimary,
+							fontWeight = FontWeight.Bold,
+							fontSize = 18.sp
+						)
+						Text(
+							text = DateUtils.getMonthName(note.timestamp),
+							color = MaterialTheme.colorScheme.onPrimary,
+							fontSize = 10.sp
+						)
+					}
 				}
 			}
-		}
-		
-		// --- COLUMNA 2: CONTENIDO ---
-		Column(
-			modifier = Modifier.weight(1f)
-		) {
-			// Hora
-			Text(
-				text = DateUtils.getTime(note.timestamp), // Hora hardcodeada final por ahora
-				fontSize = 12.sp,
-				color = Color.Gray
-			)
-			
-			Spacer(modifier = Modifier.height(4.dp))
-			
-			// Título
-			Text(
-				text = note.title,
-				fontSize = 20.sp,
-				fontWeight = FontWeight.Bold,
-				color = Color.Black
-			)
-			
-			Spacer(modifier = Modifier.height(8.dp))
-			
-			// Chips / Etiquetas (Simulados con el color de la nota)
-			Row {
-				Surface(
-					shape = RoundedCornerShape(50),
-					color = Color(0xFFE0E0E0), // Gris claro de fondo
-					modifier = Modifier.height(24.dp)
-				) {
-					Text(
-						text = "PERSONAL", // Texto dummy o podrías usar note.content corto
-						modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-						fontSize = 10.sp,
-						fontWeight = FontWeight.Bold,
-						color = Color.Black
-					)
+
+			// --- COLUMNA 2: CONTENIDO ---
+			Column(
+				modifier = Modifier.weight(1f)
+			) {
+				// Hora
+				Text(
+					text = DateUtils.getTime(note.timestamp),
+					fontSize = 12.sp,
+					color = Color.Gray
+				)
+
+				Spacer(modifier = Modifier.height(2.dp))
+
+				// Título
+				Text(
+					text = note.title,
+					fontSize = 20.sp,
+					fontWeight = FontWeight.Bold,
+					color = MaterialTheme.colorScheme.onBackground
+				)
+
+				Spacer(modifier = Modifier.height(8.dp))
+
+				// Contenido corto a modo de Chip
+				if (note.content.isNotBlank()) {
+					Surface(
+						shape = RoundedCornerShape(50),
+						color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
+						modifier = Modifier.height(24.dp)
+					) {
+						Text(
+							text = note.content,
+							modifier = Modifier.padding(horizontal = 12.dp, vertical = 0.dp),
+							fontSize = 10.sp,
+							fontWeight = FontWeight.Bold,
+							color = MaterialTheme.colorScheme.onSecondary,
+							maxLines = 1
+						)
+					}
 				}
 			}
 		}

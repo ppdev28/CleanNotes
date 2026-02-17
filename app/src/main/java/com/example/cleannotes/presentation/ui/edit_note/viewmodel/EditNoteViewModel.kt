@@ -9,7 +9,7 @@ import com.example.cleannotes.domain.model.InvalidNoteException
 import com.example.cleannotes.domain.model.Note
 import com.example.cleannotes.domain.usecase.AddNoteUseCase
 import com.example.cleannotes.domain.usecase.GetNoteUseCase
-import com.example.cleannotes.presentation.ui.edit_note.AddEditNoteEvent
+import com.example.cleannotes.presentation.ui.edit_note.EditNoteEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddEditNoteViewModel @Inject constructor(
+class EditNoteViewModel @Inject constructor(
 	private val getNoteUseCase: GetNoteUseCase,
 	private val addNoteUseCase: AddNoteUseCase,
 	savedStateHandle: SavedStateHandle
@@ -51,13 +51,13 @@ class AddEditNoteViewModel @Inject constructor(
 		}
 	}
 	
-	fun onEvent(event: AddEditNoteEvent) {
+	fun onEvent(event: EditNoteEvent) {
 		when (event) {
-			is AddEditNoteEvent.EnteredTitle -> {
+			is EditNoteEvent.EnteredTitle -> {
 				_noteTitle.value = event.value
 			}
 			
-			is AddEditNoteEvent.EnteredContent -> {
+			is EditNoteEvent.EnteredContent -> {
 				_noteContent.value = event.value
 			}
 		}
