@@ -1,0 +1,86 @@
+name: Android Build & Artifacts (Manual)
+
+env:
+  # Nombre del módulo principal (usualmente 'app')
+  main_project_module: app
+  # Nombre para mostrar en los artefactos
+  app_name: Clean Notes
+
+# 1. Trigger Manual Exclusivo
+on:
+  workflow_dispatch:
+    inputs:
+      buildType:
+        description: 'Tipo de Build (debug/release)'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+        - debug
+        - release
+        - all
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle' # Habilita caché de Gradle para builds más rápidos
+
+      - name: Dar permisos de ejecución a Gradlew
+        run: chmod +x ./gradlew
+
+      # 2. Testing Unitario (Best Practice: Fail Fast)
+      # Si los tests fallan, no gastamos tiempo compilando el APK
+      - name: Ejecutar Unit Tests
+        run: ./gradlew test
+
+      # 3. Construcción Condicional (Ahorra tiempo)
+      # Genera APK Debug
+      - name: Build APK Debug
+        if: ${{ github.event.inputs.buildType == 'debug' || github.event.inputs.buildType == 'all' }}
+        run: ./gradlew ${{ env.main_project_module }}:assembleDebug
+
+      # Genera APK Release (Nota: Sin firmar a menos que configures signingConfig en build.gradle)
+      - name: Build APK Release
+        if: ${{ github.event.inputs.buildType == 'release' || github.event.inputs.buildType == 'all' }}
+        run: ./gradlew ${{ env.main_project_module }}:assembleRelease
+
+      # Genera AAB Release (Para Play Store)
+      - name: Build Bundle (AAB) Release
+        if: ${{ github.event.inputs.buildType == 'release' || github.event.inputs.buildType == 'all' }}
+        run: ./gradlew ${{ env.main_project_module }}:bundleRelease
+
+      # 4. Subida de Artefactos (Organizados)
+      
+      # Upload Debug
+      - name: Upload APK Debug
+        if: ${{ github.event.inputs.buildType == 'debug' || github.event.inputs.buildType == 'all' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.app_name }}-debug
+          path: ${{ env.main_project_module }}/build/outputs/apk/debug/*.apk
+
+      # Upload Release APK
+      - name: Upload APK Release
+        if: ${{ github.event.inputs.buildType == 'release' || github.event.inputs.buildType == 'all' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.app_name }}-release-apk
+          path: ${{ env.main_project_module }}/build/outputs/apk/release/*.apk
+
+      # Upload Release Bundle
+      - name: Upload AAB Release
+        if: ${{ github.event.inputs.buildType == 'release' || github.event.inputs.buildType == 'all' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.app_name }}-release-aab
+          path: ${{ env.main_project_module }}/build/outputs/bundle/release/*.aab
