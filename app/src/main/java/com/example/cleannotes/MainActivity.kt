@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
 			CleanNotesTheme {
 				Surface(color = MaterialTheme.colorScheme.background) {
 					val navController = rememberNavController()
-					
+
 					NavHost(
 						navController = navController,
 						startDestination = "home_screen"
@@ -41,11 +41,11 @@ class MainActivity : ComponentActivity() {
 						composable(route = "all_reminders_screen") {
 							AllRemindersScreen(navController = navController)
 						}
-						
+
 						// Pantalla Añadir/Editar
 						// Aceptamos un argumento opcional ?noteId={noteId}
 						composable(
-							route = "add_edit_note?noteId={noteId}",
+							route = "edit_note?noteId={noteId}",
 							arguments = listOf(
 								navArgument(name = "noteId") {
 									type = NavType.IntType
@@ -53,7 +53,6 @@ class MainActivity : ComponentActivity() {
 								}
 							)
 						) {
-							// ¡AQUÍ LLAMAMOS A LA PANTALLA REAL!
 							EditNoteScreen(
 								navController = navController
 							)

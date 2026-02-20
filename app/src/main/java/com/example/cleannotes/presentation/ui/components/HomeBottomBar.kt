@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -55,7 +56,7 @@ fun HomeBottomBar(
             TextField(
                 value = text,
                 onValueChange = { text = it },
-                placeholder = { Text("write...", color = Color.Gray) },
+                placeholder = { Text("write...", color = MaterialTheme.colorScheme.onBackground) },
                 modifier = Modifier.weight(1f),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,

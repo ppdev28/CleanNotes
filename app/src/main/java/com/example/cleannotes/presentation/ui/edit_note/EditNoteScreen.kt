@@ -107,57 +107,70 @@ fun EditNoteTopBar(
 
 @Composable
 fun EditNoteContent(
-	title: String,
-	content: String,
-	onTitleChange: (String) -> Unit,
-	onContentChange: (String) -> Unit,
-	modifier: Modifier = Modifier
+    title: String,
+    content: String,
+    onTitleChange: (String) -> Unit,
+    onContentChange: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-	val scrollState = rememberScrollState()
-	Column(
-		modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp)
-        .verticalScroll(scrollState)
-	) {
-		TextField(
-			value = title,
-			onValueChange = { onTitleChange(it) },
-			placeholder = { Text("Title") },
-			textStyle = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-			colors = TextFieldDefaults.colors(
-				focusedContainerColor = Color.Transparent,
-				unfocusedContainerColor = Color.Transparent,
-				disabledContainerColor = Color.Transparent,
-				focusedIndicatorColor = Color.Transparent,
-				unfocusedIndicatorColor = Color.Transparent,
-				disabledIndicatorColor = Color.Transparent,
-			)
-		)
-		Spacer(modifier = Modifier.height(8.dp))
-		Text(
-			text = "",
-			color = Color(0xFFFF9800),
-			style = MaterialTheme.typography.bodyMedium
-		)
-		Spacer(modifier = Modifier.height(16.dp))
-		TextField(
-			value = content,
-			onValueChange = { onContentChange(it) },
-			placeholder = { Text("Content") },
-			textStyle = MaterialTheme.typography.bodyLarge,
-			colors = TextFieldDefaults.colors(
-				focusedContainerColor = Color.Transparent,
-				unfocusedContainerColor = Color.Transparent,
-				disabledContainerColor = Color.Transparent,
-				focusedIndicatorColor = Color.Transparent,
-				unfocusedIndicatorColor = Color.Transparent,
-				disabledIndicatorColor = Color.Transparent,
-			),
-			modifier = Modifier.fillMaxHeight()
-		)
-		Spacer(modifier = Modifier.height(16.dp))
-	}
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(scrollState)
+    ) {
+        // Card for Title
+        Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            TextField(
+                value = title,
+                onValueChange = { onTitleChange(it) },
+                placeholder = { Text("Title") },
+                textStyle = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                ),
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Card for Content
+        Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            TextField(
+                value = content,
+                onValueChange = { onContentChange(it) },
+                placeholder = { Text("Content") },
+                textStyle = MaterialTheme.typography.bodyLarge,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+    }
 }
 
 @Composable

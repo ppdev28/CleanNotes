@@ -1,19 +1,16 @@
 package com.example.cleannotes.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -21,14 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cleannotes.domain.model.Note
 import com.example.cleannotes.presentation.util.DateUtils
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNoteItem(
 	note: Note,
@@ -36,16 +31,9 @@ fun HomeNoteItem(
 	isToday: Boolean = true,
 	onClick: () -> Unit
 ) {
-	Card(
+	Box(
 		modifier = modifier
-			.fillMaxWidth()
-			.padding(horizontal = 16.dp, vertical = 8.dp),
-		elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-		shape = RoundedCornerShape(12.dp),
-		onClick = onClick,
-		colors = CardDefaults.cardColors(
-			containerColor = MaterialTheme.colorScheme.surface
-		)
+			.clickable(onClick = onClick)
 	) {
 		Row(
 			modifier = Modifier.padding(16.dp),
@@ -87,10 +75,10 @@ fun HomeNoteItem(
 				Text(
 					text = DateUtils.getTime(note.timestamp),
 					fontSize = 12.sp,
-					color = Color.Gray
+					color = MaterialTheme.colorScheme.onSurfaceVariant
 				)
 
-				Spacer(modifier = Modifier.height(2.dp))
+				Spacer(modifier = Modifier.height(4.dp))
 
 				// Título
 				Text(
@@ -110,8 +98,8 @@ fun HomeNoteItem(
 						modifier = Modifier.height(24.dp)
 					) {
 						Text(
-							text = note.content,
-							modifier = Modifier.padding(horizontal = 12.dp, vertical = 0.dp),
+							text = "TAG example",
+							modifier = Modifier.padding(horizontal = 12.dp),
 							fontSize = 10.sp,
 							fontWeight = FontWeight.Bold,
 							color = MaterialTheme.colorScheme.onSecondary,
