@@ -19,7 +19,7 @@ object DateUtils {
 
     // Para la hora: "1:00 PM"
     fun getTime(timestamp: Long): String {
-        val sdf = SimpleDateFormat("h:mm a", Locale.getDefault())
+        val sdf = SimpleDateFormat("h:mm", Locale.getDefault())
         return sdf.format(Date(timestamp))
     }
 }

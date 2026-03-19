@@ -18,21 +18,21 @@ val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = LexendDeca,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 24.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     titleLarge = TextStyle(
         fontFamily = LexendDeca,
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
+        fontSize = 32.sp,
         lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        letterSpacing = 0.5.sp
     ),
     labelSmall = TextStyle(
         fontFamily = LexendDeca,
         fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
+        fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )

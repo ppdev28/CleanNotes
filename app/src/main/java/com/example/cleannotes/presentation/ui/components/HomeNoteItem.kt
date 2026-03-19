@@ -2,27 +2,32 @@ package com.example.cleannotes.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cleannotes.domain.model.Note
-import com.example.cleannotes.presentation.util.DateUtils
+import com.example.cleannotes.presentation.util.DateUtils.getDayNumber
+import com.example.cleannotes.presentation.util.DateUtils.getMonthName
+import com.example.cleannotes.presentation.util.DateUtils.getTime
 
 @Composable
 fun HomeNoteItem(
@@ -34,9 +39,12 @@ fun HomeNoteItem(
 	Box(
 		modifier = modifier
 			.clickable(onClick = onClick)
+			.background(Color.White)
 	) {
 		Row(
-			modifier = Modifier.padding(16.dp),
+			modifier = Modifier
+				.padding(horizontal = 24.dp, vertical = 12.dp)
+				.fillMaxWidth(),
 			verticalAlignment = Alignment.Top
 		) {
 			// --- COLUMNA 1: FECHA (Burbuja) ---
@@ -47,22 +55,24 @@ fun HomeNoteItem(
 				Box(
 					contentAlignment = Alignment.Center,
 					modifier = Modifier
-						.size(50.dp)
+						.size(64.dp)
 						.clip(CircleShape)
-						.background(if (isToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+						.background(if (isToday) Color.Black else Color.LightGray.copy(alpha = 0.5f))
 				) {
 					Column(horizontalAlignment = Alignment.CenterHorizontally) {
 						Text(
-							text = DateUtils.getDayNumber(note.timestamp),
-							color = MaterialTheme.colorScheme.onPrimary,
+							text = getDayNumber(note.timestamp),
+							color = if (isToday) Color.White else Color.Black,
 							fontWeight = FontWeight.Bold,
-							fontSize = 18.sp
+							fontSize = 22.sp
 						)
-						Text(
-							text = DateUtils.getMonthName(note.timestamp),
-							color = MaterialTheme.colorScheme.onPrimary,
-							fontSize = 10.sp
-						)
+						if (isToday) {
+							Text(
+								text = getMonthName(note.timestamp).uppercase(),
+								color = Color.White,
+								fontSize = 12.sp
+							)
+						}
 					}
 				}
 			}
@@ -71,40 +81,61 @@ fun HomeNoteItem(
 			Column(
 				modifier = Modifier.weight(1f)
 			) {
-				// Hora
+				// Time
+				val timeText = if (isToday) {
+					getTime(note.timestamp)
+				} else {
+					getTime(note.timestamp) + " " + getDayNumber(note.timestamp) + " " +
+							getMonthName(note.timestamp)
+				}
+
 				Text(
-					text = DateUtils.getTime(note.timestamp),
+					text = timeText,
 					fontSize = 12.sp,
-					color = MaterialTheme.colorScheme.onSurfaceVariant
+					color = Color.DarkGray
 				)
 
-				Spacer(modifier = Modifier.height(4.dp))
+				Spacer(modifier = Modifier.height(2.dp))
 
 				// Título
 				Text(
-					text = note.title,
+					text = note.title.ifBlank { "Untitled Note" },
 					fontSize = 20.sp,
 					fontWeight = FontWeight.Bold,
-					color = MaterialTheme.colorScheme.onBackground
+					color = Color.Black
 				)
 
-				Spacer(modifier = Modifier.height(8.dp))
+				Spacer(modifier = Modifier.height(6.dp))
 
-				// Contenido corto a modo de Chip
-				if (note.content.isNotBlank()) {
-					Surface(
-						shape = RoundedCornerShape(50),
-						color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
-						modifier = Modifier.height(24.dp)
-					) {
-						Text(
-							text = "TAG example",
-							modifier = Modifier.padding(horizontal = 12.dp),
-							fontSize = 10.sp,
-							fontWeight = FontWeight.Bold,
-							color = MaterialTheme.colorScheme.onSecondary,
-							maxLines = 1
-						)
+				// Tags / Chips
+				Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+					val defaultChips = listOf("YOUR", "IMPORTA")
+					val contentWords = note.content.split(" ").filter { it.isNotBlank() }
+
+					val chipsToShow = if (contentWords.isNotEmpty()) {
+						contentWords.take(2).map { it.uppercase().take(7) }
+					} else {
+						defaultChips
+					}
+
+					chipsToShow.forEach { chipText ->
+						Surface(
+							shape = RoundedCornerShape(50),
+							color = Color.LightGray.copy(alpha = 0.6f),
+							modifier = Modifier.height(24.dp)
+						) {
+							Box(contentAlignment = Alignment.Center) {
+								Text(
+									text = chipText,
+									modifier = Modifier.padding(horizontal = 12.dp),
+									fontSize = 10.sp,
+									fontWeight = FontWeight.Bold,
+									color = Color.Black,
+									maxLines = 1,
+									overflow = TextOverflow.Ellipsis
+								)
+							}
+						}
 					}
 				}
 			}

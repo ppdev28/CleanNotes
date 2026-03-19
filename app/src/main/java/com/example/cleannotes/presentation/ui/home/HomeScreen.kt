@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -23,7 +24,6 @@ import com.example.cleannotes.presentation.ui.components.CustomTopBar
 import com.example.cleannotes.presentation.ui.components.HomeBottomBar
 import com.example.cleannotes.presentation.ui.components.HomeNoteItem
 import com.example.cleannotes.presentation.ui.home.viewmodel.NotesViewModel
-import com.example.cleannotes.presentation.util.DateUtils
 
 @Composable
 fun HomeScreen(
@@ -33,14 +33,14 @@ fun HomeScreen(
 	val state by viewModel.state.collectAsState()
 
 	Scaffold(
-		containerColor = MaterialTheme.colorScheme.background,
+		containerColor = Color.White, // Force white background
 		topBar = {
 			CustomTopBar(navController)
 		},
 		bottomBar = {
 			Box(
 				modifier = Modifier
-					.background(MaterialTheme.colorScheme.background)
+					.background(Color.White)
 					.padding(bottom = 16.dp)
 			) {
 				HomeBottomBar(
@@ -57,22 +57,15 @@ fun HomeScreen(
 				.padding(padding)
 		) {
 			Text(
-				text = "Today, ${DateUtils.getDayNumber(System.currentTimeMillis())} ${
-					DateUtils.getMonthName(
-						System.currentTimeMillis()
-					)
-				}",
-				modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+				text = "Notas de hoy",
+				modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+				color = Color.Black,
+				style = MaterialTheme.typography.bodyLarge
 			)
 
-			HorizontalDivider(
-				modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
-				thickness = 1.dp,
-				color = MaterialTheme.colorScheme.onBackground
-			)
 			LazyColumn(
 				modifier = Modifier.fillMaxSize(),
-				contentPadding = PaddingValues(top = 12.dp, bottom = 16.dp)
+				contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
 			) {
 				items(state.notes) { note ->
 					val isFirst = state.notes.firstOrNull() == note
@@ -86,9 +79,9 @@ fun HomeScreen(
 					)
 
 					HorizontalDivider(
-						modifier = Modifier.padding(horizontal = 30.dp, vertical = 4.dp),
+						modifier = Modifier.padding(start = 104.dp, end = 24.dp, top = 8.dp, bottom = 8.dp),
 						thickness = 1.dp,
-						color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+						color = Color.LightGray.copy(alpha = 0.4f)
 					)
 				}
 			}
