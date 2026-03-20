@@ -19,6 +19,12 @@ CleanNotes is a modern Android application for creating and managing notes. It i
 * Offline support with local data persistence using Room.
 * Built following modern Android development best practices.
 
+## Image examples
+
+### Home Screen
+<img src="screenshots/Screenshot-1.png"  width="250" alt="Home Screen">      
+<img src="screenshots/screenshot-2.png"  width="250" alt="Home Screen">
+
 ## 🚀 Getting Started
 
 To run the project locally, clone the repository and open it in **Android Studio**.
