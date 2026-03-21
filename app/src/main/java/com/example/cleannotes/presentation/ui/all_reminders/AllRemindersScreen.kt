@@ -1,25 +1,18 @@
 package com.example.cleannotes.presentation.ui.all_reminders
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,76 +21,127 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.cleannotes.domain.model.Note
 import com.example.cleannotes.presentation.ui.home.viewmodel.NotesViewModel
 import com.example.cleannotes.presentation.ui.components.BottomNavigationBar
-import com.example.cleannotes.presentation.ui.components.SimpleNoteItem
+import com.example.cleannotes.presentation.ui.components.HomeNoteItem
+import com.example.cleannotes.presentation.util.DateUtils.getDayNumber
+import com.example.cleannotes.presentation.util.DateUtils.getMonthName
 
 @Composable
 fun AllRemindersScreen(
-	navController: NavController,
-	viewModel: NotesViewModel = hiltViewModel() // Reutilizamos el mismo VM
+    navController: NavController,
+    viewModel: NotesViewModel = hiltViewModel() // Reutilizamos el mismo VM
 ) {
-	val state by viewModel.state.collectAsState()
-	
-	Scaffold(
-		containerColor = Color(0xFFF8F8F8), // Un gris muy suave de fondo para que resalten las cards blancas
-		topBar = {
-			// Top Bar Personalizada según la imagen
-			Column(
-				modifier = Modifier
-					.fillMaxWidth()
-					.background(Color.White)
-					.padding(horizontal = 16.dp, vertical = 12.dp)
-			) {
-				// Fila superior: Icono + Clean Notes
-				Row(verticalAlignment = Alignment.CenterVertically) {
-					Icon(
-						imageVector = Icons.Filled.Notifications, // Icono tipo notificación
-						contentDescription = "Logo",
-						modifier = Modifier.size(28.dp),
-						tint = Color.Black
-					)
-					Spacer(modifier = Modifier.width(8.dp))
-					Text(
-						text = "Clean Notes",
-						fontWeight = FontWeight.Bold,
-						fontSize = 24.sp,
-						color = Color.Black
-					)
-				}
-			}
-		},
-		bottomBar = {
-			BottomNavigationBar(navController = navController)
-		}
-	) { padding ->
-		Column(
-			modifier = Modifier
-				.fillMaxSize()
-				.padding(padding)
-				.padding(horizontal = 16.dp)
-		) {
-			// Título Grande "Recordatorio"
-			Spacer(modifier = Modifier.height(16.dp))
-			Text(
-				text = "Recordatorios",
-				fontSize = 32.sp,
-				fontWeight = FontWeight.Bold,
-				color = Color.Black,
-			)
-			Spacer(modifier = Modifier.height(16.dp))
-			
-			// Lista de Notas
-			LazyColumn {
-				items(state.notes) { note ->
-					SimpleNoteItem(
-						note = note,
-						onClick = {
-							navController.navigate("add_edit_note?noteId=${note.id}")
-						}
-					)
-				}
-			}
-		}
-	}
+    val state by viewModel.state.collectAsState()
+
+    // Filtramos para mostrar solo los recordatorios
+    val remindersList = state.notes.filter { it.content == "Remember" }
+
+    var noteToDelete by remember { mutableStateOf<Note?>(null) }
+
+    if (noteToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { noteToDelete = null },
+            title = { Text("Eliminar recordatorio") },
+            text = { Text("¿Estás seguro que deseas eliminar este recordatorio?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        noteToDelete?.let { viewModel.onDeleteNote(it) }
+                        noteToDelete = null
+                    }
+                ) {
+                    Text("Eliminar")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { noteToDelete = null }
+                ) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+
+    Scaffold(
+        containerColor = Color.White,
+        topBar = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.Notifications,
+                        contentDescription = "Logo",
+                        modifier = Modifier.size(28.dp),
+                        tint = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Clean Notes",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp,
+                        color = Color.Black
+                    )
+                }
+            }
+        },
+        bottomBar = {
+            BottomNavigationBar(navController = navController)
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Recordatorios",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (remindersList.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("No hay recordatorios pendientes", color = Color.Gray)
+                }
+            } else {
+                val groupedNotes = remindersList.groupBy { getDayNumber(it.timestamp) + getMonthName(it.timestamp) }
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 16.dp)
+                ) {
+                    items(groupedNotes.entries.toList()) { (key, notesOfDay) ->
+                        val isFirst = groupedNotes.keys.firstOrNull() == key
+
+                        HomeNoteItem(
+                            notes = notesOfDay,
+                            isToday = isFirst,
+                            onClick = { note ->
+                                navController.navigate("edit_note?noteId=${note.id}")
+                            },
+                            onLongClick = { note ->
+                                noteToDelete = note
+                            }
+                        )
+                        HorizontalDivider(
+                            modifier = Modifier.padding(start = 104.dp, end = 24.dp, top = 8.dp, bottom = 8.dp),
+                            thickness = 1.dp,
+                            color = Color.LightGray.copy(alpha = 0.4f)
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

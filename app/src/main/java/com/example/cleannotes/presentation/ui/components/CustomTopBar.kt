@@ -21,13 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
 fun CustomTopBar(navController: NavController) {
 	Surface(
 		modifier = Modifier.fillMaxWidth(),
-		color = MaterialTheme.colorScheme.background // The image background is white
+		color = MaterialTheme.colorScheme.background,
+		shadowElevation = 2.dp// The image background is white
 	) {
 		Column(
 			modifier = Modifier
@@ -35,12 +37,15 @@ fun CustomTopBar(navController: NavController) {
 				.padding(end = 16.dp, start = 16.dp, top = 24.dp, bottom = 8.dp)
 		) {
 			Row(
-				modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(top = 24.dp),
 				verticalAlignment = Alignment.CenterVertically,
 				horizontalArrangement = Arrangement.SpaceBetween
 			) {
 				Text(
 					text = "Clean Notes",
+					fontSize = 24.sp,
 					style = MaterialTheme.typography.titleLarge
 				)
 				// Profile Icon
