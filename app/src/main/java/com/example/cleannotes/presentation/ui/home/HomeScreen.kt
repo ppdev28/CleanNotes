@@ -1,15 +1,24 @@
 package com.example.cleannotes.presentation.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Note
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -70,7 +79,7 @@ fun HomeScreen(
 	}
 
 	Scaffold(
-		containerColor = MaterialTheme.colorScheme.background, // Force white background
+		containerColor = MaterialTheme.colorScheme.background,
 		topBar = {
 			CustomTopBar(navController)
 		},
@@ -93,11 +102,44 @@ fun HomeScreen(
 				.fillMaxSize()
 				.padding(padding)
 		) {
-			val groupedNotes = state.notes.groupBy { getDayNumber(it.timestamp) + getMonthName(it.timestamp) }
+			// Botones justo debajo del Top Bar
+			Row(
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(horizontal = 24.dp, vertical = 8.dp),
+				horizontalArrangement = Arrangement.spacedBy(32.dp)
+			) {
+				Button(
+					onClick = { navController.navigate("all_notes_screen") },
+					modifier = Modifier.weight(1f),
+					colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+				) {
+					Icon(
+						imageVector = Icons.AutoMirrored.Filled.Note,
+						modifier = Modifier.padding(end = 4.dp), contentDescription = "All Notes"
+					)
+					Text("Notes", color = MaterialTheme.colorScheme.onSecondary)
+				}
+				Button(
+					onClick = { navController.navigate("all_reminders_screen") },
+					modifier = Modifier.weight(1f),
+					colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+				) {
+					Icon(
+						imageVector = Icons.Default.Notifications,
+						modifier = Modifier.padding(end = 4.dp),
+						contentDescription = "All Notes"
+					)
+					Text("Reminders", color = MaterialTheme.colorScheme.onSecondary)
+				}
+			}
+
+			val groupedNotes =
+				state.notes.groupBy { getDayNumber(it.timestamp) + getMonthName(it.timestamp) }
 
 			LazyColumn(
 				modifier = Modifier.fillMaxSize(),
-				contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
+				contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
 			) {
 				items(groupedNotes.entries.toList()) { (key, notesOfDay) ->
 					val isFirst = groupedNotes.keys.firstOrNull() == key

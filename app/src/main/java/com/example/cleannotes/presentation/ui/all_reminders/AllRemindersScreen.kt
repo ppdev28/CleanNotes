@@ -4,8 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,125 +21,116 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cleannotes.domain.model.Note
 import com.example.cleannotes.presentation.ui.home.viewmodel.NotesViewModel
-import com.example.cleannotes.presentation.ui.components.BottomNavigationBar
+import com.example.cleannotes.presentation.ui.components.CustomTopBar
+import com.example.cleannotes.presentation.ui.components.HomeBottomBar
 import com.example.cleannotes.presentation.ui.components.HomeNoteItem
 import com.example.cleannotes.presentation.util.DateUtils.getDayNumber
 import com.example.cleannotes.presentation.util.DateUtils.getMonthName
 
 @Composable
 fun AllRemindersScreen(
-    navController: NavController,
-    viewModel: NotesViewModel = hiltViewModel() // Reutilizamos el mismo VM
+	navController: NavController,
+	viewModel: NotesViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+	val state by viewModel.state.collectAsState()
 
-    // Filtramos para mostrar solo los recordatorios
-    val remindersList = state.notes.filter { it.content == "Remember" }
+	val remindersList = state.notes.filter { it.content == "Remember" }
 
-    var noteToDelete by remember { mutableStateOf<Note?>(null) }
+	var noteToDelete by remember { mutableStateOf<Note?>(null) }
+	val showDeleteDialog = remember { mutableStateOf(false) }
 
-    if (noteToDelete != null) {
-        AlertDialog(
-            onDismissRequest = { noteToDelete = null },
-            title = { Text("Eliminar recordatorio") },
-            text = { Text("¿Estás seguro que deseas eliminar este recordatorio?") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        noteToDelete?.let { viewModel.onDeleteNote(it) }
-                        noteToDelete = null
-                    }
-                ) {
-                    Text("Eliminar")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = { noteToDelete = null }
-                ) {
-                    Text("Cancelar")
-                }
-            }
-        )
-    }
+	if (showDeleteDialog.value) {
+		AlertDialog(
+			onDismissRequest = { showDeleteDialog.value = false },
+			title = { Text("Eliminar recordatorio") },
+			text = { Text("¿Estás seguro que deseas eliminar este recordatorio?") },
+			confirmButton = {
+				TextButton(
+					onClick = {
+						noteToDelete?.let { viewModel.onDeleteNote(it) }
+						showDeleteDialog.value = false
+						noteToDelete = null
+					}
+				) {
+					Text("Eliminar")
+				}
+			},
+			dismissButton = {
+				TextButton(
+					onClick = { showDeleteDialog.value = false }
+				) {
+					Text("Cancelar")
+				}
+			}
+		)
+	}
 
-    Scaffold(
-        containerColor = Color.White,
-        topBar = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Filled.Notifications,
-                        contentDescription = "Logo",
-                        modifier = Modifier.size(28.dp),
-                        tint = Color.Black
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Clean Notes",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
-                        color = Color.Black
-                    )
-                }
-            }
-        },
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Recordatorios",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.padding(horizontal = 24.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+	Scaffold(
+		containerColor = MaterialTheme.colorScheme.background,
+		topBar = {
+			CustomTopBar(navController)
+		},
+		bottomBar = {
+			Box(
+				modifier = Modifier
+					.background(Color.White)
+					.padding(bottom = 16.dp)
+			) {
+				HomeBottomBar(
+					onQuickAdd = { text, isReminder ->
+						viewModel.onQuickAdd(text, isReminder)
+					}
+				)
+			}
+		}
+	) { padding ->
+		Column(
+			modifier = Modifier
+				.fillMaxSize()
+				.padding(padding)
+		) {
+			Text(
+				text = "Recordatorios",
+				fontSize = 32.sp,
+				fontWeight = FontWeight.Bold,
+				color = Color.Black,
+				modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+			)
 
-            if (remindersList.isEmpty()) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No hay recordatorios pendientes", color = Color.Gray)
-                }
-            } else {
-                val groupedNotes = remindersList.groupBy { getDayNumber(it.timestamp) + getMonthName(it.timestamp) }
+			if (remindersList.isEmpty()) {
+				Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+					Text("No hay recordatorios pendientes", color = Color.Gray)
+				}
+			} else {
+				val groupedNotes =
+					remindersList.groupBy { getDayNumber(it.timestamp) + getMonthName(it.timestamp) }
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(bottom = 16.dp)
-                ) {
-                    items(groupedNotes.entries.toList()) { (key, notesOfDay) ->
-                        val isFirst = groupedNotes.keys.firstOrNull() == key
+				LazyColumn(
+					modifier = Modifier.fillMaxSize(),
+					contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
+				) {
+					items(groupedNotes.entries.toList()) { (key, notesOfDay) ->
+						val isFirst = groupedNotes.keys.firstOrNull() == key
 
-                        HomeNoteItem(
-                            notes = notesOfDay,
-                            isToday = isFirst,
-                            onClick = { note ->
-                                navController.navigate("edit_note?noteId=${note.id}")
-                            },
-                            onLongClick = { note ->
-                                noteToDelete = note
-                            }
-                        )
-                        HorizontalDivider(
-                            modifier = Modifier.padding(start = 104.dp, end = 24.dp, top = 8.dp, bottom = 8.dp),
-                            thickness = 1.dp,
-                            color = Color.LightGray.copy(alpha = 0.4f)
-                        )
-                    }
-                }
-            }
-        }
-    }
+						HomeNoteItem(
+							notes = notesOfDay,
+							isToday = isFirst,
+							onClick = { note ->
+								navController.navigate("edit_note?noteId=${note.id}")
+							},
+							onLongClick = { note ->
+								noteToDelete = note
+								showDeleteDialog.value = true
+							}
+						)
+						HorizontalDivider(
+							modifier = Modifier.padding(start = 104.dp, end = 24.dp, top = 8.dp, bottom = 8.dp),
+							thickness = 1.dp,
+							color = Color.LightGray.copy(alpha = 0.4f)
+						)
+					}
+				}
+			}
+		}
+	}
 }
