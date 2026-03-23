@@ -84,8 +84,8 @@ fun AllNotesScreen(
 			TopAppBar(
 				title = {
 					Text(
-						"All Notes",
-						fontStyle = MaterialTheme.typography.bodyLarge.fontStyle,
+						"Notes",
+						fontStyle = MaterialTheme.typography.titleMedium.fontStyle,
 						color = MaterialTheme.colorScheme.onBackground
 					)
 				},

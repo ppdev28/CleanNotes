@@ -1,10 +1,25 @@
 package com.example.cleannotes.presentation.ui.all_reminders
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -14,19 +29,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cleannotes.domain.model.Note
-import com.example.cleannotes.presentation.ui.home.viewmodel.NotesViewModel
-import com.example.cleannotes.presentation.ui.components.CustomTopBar
 import com.example.cleannotes.presentation.ui.components.HomeBottomBar
 import com.example.cleannotes.presentation.ui.components.HomeNoteItem
+import com.example.cleannotes.presentation.ui.home.viewmodel.NotesViewModel
 import com.example.cleannotes.presentation.util.DateUtils.getDayNumber
 import com.example.cleannotes.presentation.util.DateUtils.getMonthName
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllRemindersScreen(
 	navController: NavController,
@@ -68,7 +81,22 @@ fun AllRemindersScreen(
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.background,
 		topBar = {
-			CustomTopBar(navController)
+			TopAppBar(
+				title = {
+					Text(
+						"Reminders",
+						fontStyle = MaterialTheme.typography.bodyLarge.fontStyle,
+						color = MaterialTheme.colorScheme.onBackground
+					)
+				},
+				navigationIcon = {
+					IconButton(onClick = { navController.navigateUp() }) {
+						Icon(
+							imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+							contentDescription = "Atrás",
+						)
+					}
+				})
 		},
 		bottomBar = {
 			Box(
@@ -89,13 +117,6 @@ fun AllRemindersScreen(
 				.fillMaxSize()
 				.padding(padding)
 		) {
-			Text(
-				text = "Recordatorios",
-				fontSize = 32.sp,
-				fontWeight = FontWeight.Bold,
-				color = Color.Black,
-				modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
-			)
 
 			if (remindersList.isEmpty()) {
 				Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

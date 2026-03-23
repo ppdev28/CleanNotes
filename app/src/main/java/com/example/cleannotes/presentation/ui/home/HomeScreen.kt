@@ -9,16 +9,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Note
+import androidx.compose.material.icons.automirrored.filled.StickyNote2
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -86,7 +89,7 @@ fun HomeScreen(
 		bottomBar = {
 			Box(
 				modifier = Modifier
-					.background(Color.White)
+					.background(MaterialTheme.colorScheme.background)
 					.padding(bottom = 16.dp)
 			) {
 				HomeBottomBar(
@@ -102,35 +105,43 @@ fun HomeScreen(
 				.fillMaxSize()
 				.padding(padding)
 		) {
-			// Botones justo debajo del Top Bar
+			// Botones redondos sin texto
 			Row(
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(horizontal = 24.dp, vertical = 8.dp),
-				horizontalArrangement = Arrangement.spacedBy(32.dp)
+				horizontalArrangement = Arrangement.spacedBy(16.dp)
 			) {
-				Button(
+				IconButton(
 					onClick = { navController.navigate("all_notes_screen") },
-					modifier = Modifier.weight(1f),
-					colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+					modifier = Modifier
+						.size(48.dp)
+						.clip(CircleShape),
+					colors = IconButtonDefaults.iconButtonColors(
+						containerColor = MaterialTheme.colorScheme.tertiary
+					)
 				) {
 					Icon(
-						imageVector = Icons.AutoMirrored.Filled.Note,
-						modifier = Modifier.padding(end = 4.dp), contentDescription = "All Notes"
+						imageVector = Icons.AutoMirrored.Filled.StickyNote2,
+						contentDescription = "All Notes",
+						tint = MaterialTheme.colorScheme.onTertiary
 					)
-					Text("Notes", color = MaterialTheme.colorScheme.onSecondary)
 				}
-				Button(
+
+				IconButton(
 					onClick = { navController.navigate("all_reminders_screen") },
-					modifier = Modifier.weight(1f),
-					colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+					modifier = Modifier
+						.size(48.dp)
+						.clip(CircleShape),
+					colors = IconButtonDefaults.iconButtonColors(
+						containerColor = MaterialTheme.colorScheme.tertiary
+					)
 				) {
 					Icon(
 						imageVector = Icons.Default.Notifications,
-						modifier = Modifier.padding(end = 4.dp),
-						contentDescription = "All Notes"
+						contentDescription = "All Reminders",
+						tint = MaterialTheme.colorScheme.onTertiary
 					)
-					Text("Reminders", color = MaterialTheme.colorScheme.onSecondary)
 				}
 			}
 

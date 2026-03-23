@@ -29,6 +29,13 @@ val Typography = Typography(
         lineHeight = 28.sp,
         letterSpacing = 0.5.sp
     ),
+    titleMedium= TextStyle(
+        fontFamily = LexendDeca,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
+    ),
     labelSmall = TextStyle(
         fontFamily = LexendDeca,
         fontWeight = FontWeight.Medium,

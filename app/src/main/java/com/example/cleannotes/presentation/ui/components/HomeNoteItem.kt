@@ -12,6 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.StickyNote2
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +44,7 @@ fun HomeNoteItem(
 	val firstNote = notes.first()
 
 	val isColor =
-		if (isToday) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.secondary.copy(
+		if (isToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary.copy(
 			alpha = 0.5f
 		)
 
@@ -97,13 +101,21 @@ fun HomeNoteItem(
 							)
 							.padding(vertical = 4.dp)
 					) {
-						Text(
-							text = getTime(note.timestamp),
-							fontSize = 12.sp,
-							color = MaterialTheme.colorScheme.onBackground,
-							maxLines = 1,
-							overflow = TextOverflow.Ellipsis
-						)
+						Row(verticalAlignment = Alignment.CenterVertically) {
+							Icon(
+								imageVector = if (note.content == "Remember") Icons.Default.Notifications else Icons.AutoMirrored.Filled.StickyNote2,
+								contentDescription = if (note.content == "Remember") "Reminder" else "Note",
+								modifier = Modifier.size(14.dp).padding(end = 4.dp),
+								tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+							)
+							Text(
+								text = getTime(note.timestamp),
+								fontSize = 12.sp,
+								color = MaterialTheme.colorScheme.onBackground,
+								maxLines = 1,
+								overflow = TextOverflow.Ellipsis
+							)
+						}
 
 						Spacer(modifier = Modifier.height(2.dp))
 

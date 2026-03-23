@@ -2,7 +2,7 @@ package com.example.cleannotes.presentation.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Light Theme - Earthy Greens & Grays
-val EarthyGreen = Color(0xFF556B2F)
+val SoftSageL = Color(0xFF8FBC8F)
 val StoneGray = Color(0xFF8D8D8D)
 val MutedClay = Color(0xFFBCAAA4)
 val OffWhiteBG = Color(0xFFFCFCFC)
