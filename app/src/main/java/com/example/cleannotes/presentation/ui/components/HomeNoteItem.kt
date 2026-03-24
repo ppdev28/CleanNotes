@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.StickyNote2
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -91,48 +94,72 @@ fun HomeNoteItem(
 				modifier = Modifier.weight(1f)
 			) {
 				notes.forEachIndexed { index, note ->
-					Column(
+					Card(
+						elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+						shape = RoundedCornerShape(12.dp),
+						colors = CardDefaults.cardColors(
+							containerColor = MaterialTheme.colorScheme.surface
+						),
 						modifier = Modifier
 							.fillMaxWidth()
-							.clip(MaterialTheme.shapes.small)
+							.clip(RoundedCornerShape(12.dp))
 							.combinedClickable(
 								onClick = { onClick(note) },
 								onLongClick = { onLongClick(note) }
 							)
-							.padding(vertical = 4.dp)
 					) {
-						Row(verticalAlignment = Alignment.CenterVertically) {
+						Row(
+							modifier = Modifier
+								.fillMaxWidth()
+								.padding(horizontal = 16.dp, vertical = 12.dp),
+							verticalAlignment = Alignment.CenterVertically
+						) {
+							// Título e info principal (ocupa el espacio restante)
+							Column(modifier = Modifier.weight(1f)) {
+								Text(
+									text = getTime(note.timestamp),
+									fontSize = 12.sp,
+									color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+									maxLines = 1,
+									overflow = TextOverflow.Ellipsis
+								)
+
+								Spacer(modifier = Modifier.height(4.dp))
+
+								// Determinar título
+								val isReminder = note.content == "Remember"
+								val displayTitle = if (note.title.isBlank()) {
+									if (isReminder) "Untitled Reminder" else "Untitled Note"
+								} else {
+									note.title.replaceFirstChar { it.uppercase() }
+								}
+
+								// Título
+								Text(
+									text = displayTitle,
+									fontSize = 18.sp,
+									fontWeight = FontWeight.SemiBold,
+									color = MaterialTheme.colorScheme.onBackground,
+									maxLines = 1,
+									overflow = TextOverflow.Ellipsis
+								)
+							}
+
+							// Icono indicador a la derecha
 							Icon(
 								imageVector = if (note.content == "Remember") Icons.Default.Notifications else Icons.AutoMirrored.Filled.StickyNote2,
 								contentDescription = if (note.content == "Remember") "Reminder" else "Note",
-								modifier = Modifier.size(14.dp).padding(end = 4.dp),
+								modifier = Modifier
+									.size(24.dp) // Icono más grande
+									.padding(start = 8.dp),
 								tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
 							)
-							Text(
-								text = getTime(note.timestamp),
-								fontSize = 12.sp,
-								color = MaterialTheme.colorScheme.onBackground,
-								maxLines = 1,
-								overflow = TextOverflow.Ellipsis
-							)
 						}
-
-						Spacer(modifier = Modifier.height(2.dp))
-
-						// Título
-						Text(
-							text = note.title.ifBlank { "Untitled Note" },
-							fontSize = 20.sp,
-							fontWeight = FontWeight.Bold,
-							color = MaterialTheme.colorScheme.onBackground,
-							maxLines = 1,
-							overflow = TextOverflow.Ellipsis
-						)
 					}
 
 					// Espaciador entre notas apiladas del mismo día
 					if (index < notes.size - 1) {
-						Spacer(modifier = Modifier.height(16.dp))
+						Spacer(modifier = Modifier.height(12.dp))
 					}
 				}
 			}

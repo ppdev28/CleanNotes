@@ -48,7 +48,7 @@ fun HomeBottomBar(
 	Column(
 		modifier = modifier
 			.fillMaxWidth()
-			.background(MaterialTheme.colorScheme.background)
+			.background(Color.Transparent)
 			.padding(vertical = 16.dp, horizontal = 24.dp),
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
@@ -58,7 +58,7 @@ fun HomeBottomBar(
 				.width(100.dp)
 				.height(3.dp)
 				.clip(RoundedCornerShape(50))
-				.background(Color.LightGray.copy(alpha = 0.8f))
+				.background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f))
 		)
 		Spacer(modifier = Modifier.height(16.dp))
 
@@ -83,7 +83,7 @@ fun HomeBottomBar(
 						onValueChange = { text = it },
 						textStyle = TextStyle(
 							fontSize = 16.sp,
-							color = Color.Black,
+							color = MaterialTheme.colorScheme.background,
 							letterSpacing = 4.sp
 						),
 						keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),

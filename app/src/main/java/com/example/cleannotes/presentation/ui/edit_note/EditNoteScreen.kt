@@ -1,6 +1,14 @@
 package com.example.cleannotes.presentation.ui.edit_note
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -8,17 +16,25 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.outlined.AttachFile
-import androidx.compose.material.icons.outlined.Draw
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.FormatAlignJustify
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.*
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cleannotes.presentation.ui.edit_note.viewmodel.EditNoteViewModel
@@ -47,8 +63,6 @@ fun EditNoteScreen(
 					onListClick = { /* Implementar lista */ },
 					onAttachClick = { /* Implementar adjuntar */ },
 					onFormatClick = { /* Implementar formato */ },
-					onDrawClick = { /* Implementar dibujo */ },
-					onNewNoteClick = { /* Implementar nueva nota */ }
 				)
 			}
 		) { padding ->
@@ -72,14 +86,7 @@ fun EditNoteTopBar(
 	onMoreClick: () -> Unit
 ) {
 	TopAppBar(
-		title = {
-			Text(
-				text = title,
-				maxLines = 1,
-				fontWeight = FontWeight.Bold,
-				fontSize = 18.sp
-			)
-		},
+		title = {},
 		navigationIcon = {
 			IconButton(onClick = onBackClick) {
 				Icon(
@@ -171,11 +178,9 @@ fun EditNoteContent(
 fun EditNoteBottomBar(
 	onListClick: () -> Unit,
 	onAttachClick: () -> Unit,
-	onFormatClick: () -> Unit,
-	onDrawClick: () -> Unit,
-	onNewNoteClick: () -> Unit
+	onFormatClick: () -> Unit
 ) {
-	BottomAppBar {
+	BottomAppBar(modifier = Modifier.background(MaterialTheme.colorScheme.primary)) {
 		Row(
 			modifier = Modifier.fillMaxWidth(),
 			horizontalArrangement = Arrangement.SpaceEvenly
@@ -188,12 +193,6 @@ fun EditNoteBottomBar(
 			}
 			IconButton(onClick = onFormatClick) {
 				Icon(Icons.Outlined.FormatAlignJustify, contentDescription = "Formato")
-			}
-			IconButton(onClick = onDrawClick) {
-				Icon(Icons.Outlined.Draw, contentDescription = "Dibujar")
-			}
-			IconButton(onClick = onNewNoteClick) {
-				Icon(Icons.Outlined.Edit, contentDescription = "Nueva nota")
 			}
 		}
 	}

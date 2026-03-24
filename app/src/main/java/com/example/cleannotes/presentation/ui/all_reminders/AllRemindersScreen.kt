@@ -29,7 +29,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cleannotes.domain.model.Note
@@ -85,8 +87,9 @@ fun AllRemindersScreen(
 				title = {
 					Text(
 						"Reminders",
-						fontStyle = MaterialTheme.typography.bodyLarge.fontStyle,
-						color = MaterialTheme.colorScheme.onBackground
+						fontSize = 24.sp,
+						fontWeight = FontWeight.ExtraLight,
+						style = MaterialTheme.typography.titleLarge
 					)
 				},
 				navigationIcon = {
@@ -101,7 +104,7 @@ fun AllRemindersScreen(
 		bottomBar = {
 			Box(
 				modifier = Modifier
-					.background(Color.White)
+					.background(MaterialTheme.colorScheme.background)
 					.padding(bottom = 16.dp)
 			) {
 				HomeBottomBar(

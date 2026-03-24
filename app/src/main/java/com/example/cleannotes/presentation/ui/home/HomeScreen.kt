@@ -12,15 +12,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.StickyNote2
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,7 +32,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -89,7 +88,7 @@ fun HomeScreen(
 		bottomBar = {
 			Box(
 				modifier = Modifier
-					.background(MaterialTheme.colorScheme.background)
+					.background(Color.Transparent)
 					.padding(bottom = 16.dp)
 			) {
 				HomeBottomBar(
@@ -105,44 +104,50 @@ fun HomeScreen(
 				.fillMaxSize()
 				.padding(padding)
 		) {
-			// Botones redondos sin texto
+			// Chips justo debajo de la Top Bar
 			Row(
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(horizontal = 24.dp, vertical = 8.dp),
-				horizontalArrangement = Arrangement.spacedBy(16.dp)
+				horizontalArrangement = Arrangement.SpaceEvenly
 			) {
-				IconButton(
+				AssistChip(
 					onClick = { navController.navigate("all_notes_screen") },
-					modifier = Modifier
-						.size(48.dp)
-						.clip(CircleShape),
-					colors = IconButtonDefaults.iconButtonColors(
-						containerColor = MaterialTheme.colorScheme.tertiary
-					)
-				) {
-					Icon(
-						imageVector = Icons.AutoMirrored.Filled.StickyNote2,
-						contentDescription = "All Notes",
-						tint = MaterialTheme.colorScheme.onTertiary
-					)
-				}
+					label = { Text("Notes") },
+					leadingIcon = {
+						Icon(
+							imageVector = Icons.AutoMirrored.Filled.StickyNote2,
+							contentDescription = "All Notes",
+							modifier = Modifier.size(AssistChipDefaults.IconSize)
+						)
+					},
+					colors = AssistChipDefaults.assistChipColors(
+						containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
+						labelColor = MaterialTheme.colorScheme.onBackground,
+						leadingIconContentColor = MaterialTheme.colorScheme.onBackground
+					),
+					border = null,
+					shape = RoundedCornerShape(16.dp)
+				)
 
-				IconButton(
+				AssistChip(
 					onClick = { navController.navigate("all_reminders_screen") },
-					modifier = Modifier
-						.size(48.dp)
-						.clip(CircleShape),
-					colors = IconButtonDefaults.iconButtonColors(
-						containerColor = MaterialTheme.colorScheme.tertiary
-					)
-				) {
-					Icon(
-						imageVector = Icons.Default.Notifications,
-						contentDescription = "All Reminders",
-						tint = MaterialTheme.colorScheme.onTertiary
-					)
-				}
+					label = { Text("Reminders") },
+					leadingIcon = {
+						Icon(
+							imageVector = Icons.Default.Notifications,
+							contentDescription = "All Reminders",
+							modifier = Modifier.size(AssistChipDefaults.IconSize)
+						)
+					},
+					colors = AssistChipDefaults.assistChipColors(
+						containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
+						labelColor = MaterialTheme.colorScheme.onBackground,
+						leadingIconContentColor = MaterialTheme.colorScheme.onBackground
+					),
+					border = null,
+					shape = RoundedCornerShape(16.dp)
+				)
 			}
 
 			val groupedNotes =
@@ -150,7 +155,7 @@ fun HomeScreen(
 
 			LazyColumn(
 				modifier = Modifier.fillMaxSize(),
-				contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
+				contentPadding = PaddingValues(top = 8.dp, bottom = 120.dp) // Añadido padding bottom para que se pueda scrollear por debajo de la HomeBottomBar flotante
 			) {
 				items(groupedNotes.entries.toList()) { (key, notesOfDay) ->
 					val isFirst = groupedNotes.keys.firstOrNull() == key
@@ -168,9 +173,9 @@ fun HomeScreen(
 					)
 
 					HorizontalDivider(
-						modifier = Modifier.padding(start = 104.dp, end = 24.dp, top = 8.dp, bottom = 8.dp),
+						modifier = Modifier.padding(start = 84.dp, end = 24.dp, top = 8.dp, bottom = 8.dp),
 						thickness = 1.dp,
-						color = Color.LightGray.copy(alpha = 0.4f)
+						color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)
 					)
 				}
 			}
