@@ -49,7 +49,7 @@ fun CustomTopBar(navController: NavController) {
 						imageVector = Icons.AutoMirrored.Outlined.StickyNote2,
 						contentDescription = "Sticky Note",
 						tint = MaterialTheme.colorScheme.onSurfaceVariant,
-						modifier = Modifier.size(32.dp)
+						modifier = Modifier.size(40.dp)
 					)
 
 					Spacer(modifier = Modifier.width(8.dp))
