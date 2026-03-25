@@ -1,7 +1,6 @@
 package com.example.cleannotes.presentation.ui.components
 
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.StickyNote2
 import androidx.compose.material.icons.automirrored.outlined.StickyNote2
@@ -34,7 +33,6 @@ fun BottomNavigationBar(
 		modifier = Modifier
 			.height(72.dp)
 			.shadow(4.dp)
-			.padding(top = 16.dp)
 	) {
 		val navBackStackEntry = navController.currentBackStackEntryAsState()
 		val currentRoute = navBackStackEntry.value?.destination?.route
