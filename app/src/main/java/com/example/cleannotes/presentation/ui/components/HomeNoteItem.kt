@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -95,13 +96,19 @@ fun HomeNoteItem(
 			) {
 				notes.forEachIndexed { index, note ->
 					Card(
-						elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+						elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
 						shape = RoundedCornerShape(12.dp),
 						colors = CardDefaults.cardColors(
 							containerColor = MaterialTheme.colorScheme.surface
 						),
 						modifier = Modifier
 							.fillMaxWidth()
+							.shadow(
+								elevation = 2.dp,
+								shape = RoundedCornerShape(12.dp),
+								ambientColor = MaterialTheme.colorScheme.onBackground,
+								spotColor = MaterialTheme.colorScheme.onBackground
+							)
 							.clip(RoundedCornerShape(12.dp))
 							.combinedClickable(
 								onClick = { onClick(note) },

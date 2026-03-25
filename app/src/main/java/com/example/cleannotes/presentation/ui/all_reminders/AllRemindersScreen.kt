@@ -1,6 +1,5 @@
 package com.example.cleannotes.presentation.ui.all_reminders
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cleannotes.domain.model.Note
-import com.example.cleannotes.presentation.ui.components.HomeBottomBar
+import com.example.cleannotes.presentation.ui.components.BottomNavigationBar
 import com.example.cleannotes.presentation.ui.components.HomeNoteItem
 import com.example.cleannotes.presentation.ui.home.viewmodel.NotesViewModel
 import com.example.cleannotes.presentation.util.DateUtils.getDayNumber
@@ -102,17 +101,7 @@ fun AllRemindersScreen(
 				})
 		},
 		bottomBar = {
-			Box(
-				modifier = Modifier
-					.background(MaterialTheme.colorScheme.background)
-					.padding(bottom = 16.dp)
-			) {
-				HomeBottomBar(
-					onQuickAdd = { text, isReminder ->
-						viewModel.onQuickAdd(text, isReminder)
-					}
-				)
-			}
+			BottomNavigationBar(navController)
 		}
 	) { padding ->
 		Column(

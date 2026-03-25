@@ -1,26 +1,13 @@
 package com.example.cleannotes.presentation.ui.home
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.StickyNote2
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,13 +19,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cleannotes.domain.model.Note
+import com.example.cleannotes.presentation.ui.components.BottomNavigationBar
 import com.example.cleannotes.presentation.ui.components.CustomTopBar
-import com.example.cleannotes.presentation.ui.components.HomeBottomBar
 import com.example.cleannotes.presentation.ui.components.HomeNoteItem
 import com.example.cleannotes.presentation.ui.home.viewmodel.NotesViewModel
 import com.example.cleannotes.presentation.util.DateUtils.getDayNumber
@@ -53,6 +39,8 @@ fun HomeScreen(
 
 	val showDeleteDialog = remember { mutableStateOf(false) }
 	var noteToDelete by remember { mutableStateOf<Note?>(null) }
+
+	// `selectedTabIndex` is no longer needed for the tabs within HomeScreen, as navigation is now via BottomNav.
 
 	if (showDeleteDialog.value) {
 		AlertDialog(
@@ -86,76 +74,22 @@ fun HomeScreen(
 			CustomTopBar(navController)
 		},
 		bottomBar = {
-			Box(
-				modifier = Modifier
-					.background(Color.Transparent)
-					.padding(bottom = 16.dp)
-			) {
-				HomeBottomBar(
-					onQuickAdd = { text, isReminder ->
-						viewModel.onQuickAdd(text, isReminder)
-					}
-				)
-			}
-		}
+			BottomNavigationBar(navController = navController)
+		} // Replaced HomeBottomBar with BottomNavigationBar
 	) { padding ->
 		Column(
 			modifier = Modifier
 				.fillMaxSize()
 				.padding(padding)
 		) {
-			// Chips justo debajo de la Top Bar
-			Row(
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 24.dp, vertical = 8.dp),
-				horizontalArrangement = Arrangement.SpaceEvenly
-			) {
-				AssistChip(
-					onClick = { navController.navigate("all_notes_screen") },
-					label = { Text("Notes") },
-					leadingIcon = {
-						Icon(
-							imageVector = Icons.AutoMirrored.Filled.StickyNote2,
-							contentDescription = "All Notes",
-							modifier = Modifier.size(AssistChipDefaults.IconSize)
-						)
-					},
-					colors = AssistChipDefaults.assistChipColors(
-						containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
-						labelColor = MaterialTheme.colorScheme.onBackground,
-						leadingIconContentColor = MaterialTheme.colorScheme.onBackground
-					),
-					border = null,
-					shape = RoundedCornerShape(16.dp)
-				)
-
-				AssistChip(
-					onClick = { navController.navigate("all_reminders_screen") },
-					label = { Text("Reminders") },
-					leadingIcon = {
-						Icon(
-							imageVector = Icons.Default.Notifications,
-							contentDescription = "All Reminders",
-							modifier = Modifier.size(AssistChipDefaults.IconSize)
-						)
-					},
-					colors = AssistChipDefaults.assistChipColors(
-						containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
-						labelColor = MaterialTheme.colorScheme.onBackground,
-						leadingIconContentColor = MaterialTheme.colorScheme.onBackground
-					),
-					border = null,
-					shape = RoundedCornerShape(16.dp)
-				)
-			}
+			// Removed PrimaryTabRow from here
 
 			val groupedNotes =
 				state.notes.groupBy { getDayNumber(it.timestamp) + getMonthName(it.timestamp) }
 
 			LazyColumn(
 				modifier = Modifier.fillMaxSize(),
-				contentPadding = PaddingValues(top = 8.dp, bottom = 120.dp) // Añadido padding bottom para que se pueda scrollear por debajo de la HomeBottomBar flotante
+				contentPadding = PaddingValues(top = 8.dp, bottom = 0.dp) // Adjusted bottom padding as BottomNavigationBar is now present
 			) {
 				items(groupedNotes.entries.toList()) { (key, notesOfDay) ->
 					val isFirst = groupedNotes.keys.firstOrNull() == key

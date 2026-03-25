@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.example.cleannotes.presentation.ui.edit_note.EditNoteScreen
 import com.example.cleannotes.presentation.ui.all_notes.AllNotesScreen
 import com.example.cleannotes.presentation.ui.all_reminders.AllRemindersScreen
+import com.example.cleannotes.presentation.ui.settings.SettingsScreen
 import com.example.cleannotes.presentation.ui.theme.CleanNotesTheme
 import com.example.cleannotes.presentation.ui.home.HomeScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +41,10 @@ class MainActivity : ComponentActivity() {
 						}
 						composable(route = "all_reminders_screen") {
 							AllRemindersScreen(navController = navController)
+						}
+						// Settings Screen
+						composable(route = "settings_screen") {
+							SettingsScreen(navController = navController)
 						}
 
 						// Pantalla Añadir/Editar

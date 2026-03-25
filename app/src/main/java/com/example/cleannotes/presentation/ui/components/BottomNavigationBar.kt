@@ -1,9 +1,15 @@
 package com.example.cleannotes.presentation.ui.components
 
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.StickyNote2
+import androidx.compose.material.icons.automirrored.outlined.StickyNote2
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -11,7 +17,10 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -21,18 +30,35 @@ fun BottomNavigationBar(
 ) {
 	NavigationBar(
 		containerColor = MaterialTheme.colorScheme.background, // Fondo blanco
-		contentColor = MaterialTheme.colorScheme.onBackground // Texto blanco
+		contentColor = MaterialTheme.colorScheme.onBackground,
+		modifier = Modifier
+			.height(72.dp)
+			.shadow(4.dp)
+			.padding(top = 16.dp)
 	) {
 		val navBackStackEntry = navController.currentBackStackEntryAsState()
 		val currentRoute = navBackStackEntry.value?.destination?.route
 
+		val isHomeRoute = currentRoute.equals("home_screen")
+		val isNotesRoute = currentRoute.equals("all_notes_screen")
+		val isRemindersRoute = currentRoute.equals("all_reminders_screen")
+		val isSearchRoute = currentRoute.equals("search_screen")
+
+		val homeIcon = Icons.Filled.Home.takeIf { isHomeRoute } ?: Icons.Outlined.Home
+		val notesIcon = Icons.AutoMirrored.Filled.StickyNote2.takeIf { isNotesRoute }
+			?: Icons.AutoMirrored.Outlined.StickyNote2
+		val remindersIcon =
+			Icons.Filled.Notifications.takeIf { isRemindersRoute } ?: Icons.Outlined.Notifications
+		val searchIcon = Icons.Filled.Search.takeIf { isSearchRoute } ?: Icons.Outlined.Search
+
+
 		// Botón HOME (Pantalla anterior Timeline)
 		NavigationBarItem(
-			selected = currentRoute == "notes_screen",
-			onClick = { navController.navigate("notes_screen") },
+			selected = isHomeRoute,
+			onClick = { navController.navigate("home_screen") },
 			icon = {
 				Icon(
-					imageVector = if (currentRoute == "notes_screen") Icons.Filled.Home else Icons.Outlined.Home,
+					imageVector = homeIcon,
 					contentDescription = "Home"
 				)
 			},
@@ -41,12 +67,25 @@ fun BottomNavigationBar(
 
 		// Botón NOTES (Esta pantalla nueva)
 		NavigationBarItem(
-			selected = currentRoute == "all_notes_screen",
+			selected = isNotesRoute,
 			onClick = { navController.navigate("all_notes_screen") },
 			icon = {
 				Icon(
-					imageVector = Icons.Outlined.Description, // Icono cuadrado/nota
+					imageVector = notesIcon, // Icono cuadrado/nota
 					contentDescription = "Notes"
+				)
+			},
+			colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent)
+		)
+
+		// Botón NOTES (Esta pantalla nueva)
+		NavigationBarItem(
+			selected = isRemindersRoute,
+			onClick = { navController.navigate("all_reminders_screen") },
+			icon = {
+				Icon(
+					imageVector = remindersIcon, // Icono cuadrado/nota
+					contentDescription = "Reminders"
 				)
 			},
 			colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent)
@@ -54,11 +93,11 @@ fun BottomNavigationBar(
 
 		// Botón SEARCH (Futuro)
 		NavigationBarItem(
-			selected = false,
+			selected = isSearchRoute,
 			onClick = { /* Todo: Implement Search */ },
 			icon = {
 				Icon(
-					imageVector = Icons.Outlined.Search,
+					imageVector = searchIcon,
 					contentDescription = "Search"
 				)
 			},
