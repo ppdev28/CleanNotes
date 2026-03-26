@@ -12,18 +12,22 @@ val LexendDeca = FontFamily(
     Font(R.font.lexend_deca_regular, FontWeight.Normal),
     Font(R.font.lexend_deca_bold, FontWeight.Bold)
 )
+val SfPro = FontFamily(
+    Font(R.font.sf_pro_regular, FontWeight.Normal),
+    Font(R.font.sf_pro_bold, FontWeight.Bold)
+)
 
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = LexendDeca,
+        fontFamily = SfPro,
         fontWeight = FontWeight.Normal,
         fontSize = 24.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = LexendDeca,
+        fontFamily = SfPro,
         fontWeight = FontWeight.Bold,
         fontSize = 32.sp,
         lineHeight = 28.sp,
