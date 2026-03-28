@@ -1,14 +1,22 @@
 package com.example.cleannotes.presentation.ui.all_notes
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ViewList
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -36,6 +44,7 @@ import androidx.navigation.NavController
 import com.example.cleannotes.domain.model.Note
 import com.example.cleannotes.presentation.ui.components.BottomNavigationBar
 import com.example.cleannotes.presentation.ui.components.HomeNoteItem
+import com.example.cleannotes.presentation.ui.components.SimpleNoteItem
 import com.example.cleannotes.presentation.ui.home.viewmodel.NotesViewModel
 import com.example.cleannotes.presentation.util.DateUtils.getDayNumber
 import com.example.cleannotes.presentation.util.DateUtils.getMonthName
@@ -52,6 +61,9 @@ fun AllNotesScreen(
 
 	var noteToDelete by remember { mutableStateOf<Note?>(null) }
 	val showDeleteDialog = remember { mutableStateOf(false) }
+	
+	// Estado para controlar si mostramos la vista de lista (true) o grid (false)
+	var isListView by remember { mutableStateOf(true) }
 
 	if (showDeleteDialog.value) {
 		AlertDialog(
@@ -98,7 +110,8 @@ fun AllNotesScreen(
 							contentDescription = "Atrás",
 						)
 					}
-				})
+				}
+			)
 		},
 		bottomBar = {
 			BottomNavigationBar(navController)
@@ -109,37 +122,74 @@ fun AllNotesScreen(
 				.fillMaxSize()
 				.padding(padding)
 		) {
+			Row(
+				horizontalArrangement = Arrangement.End,
+				verticalAlignment = Alignment.CenterVertically,
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(horizontal = 16.dp, vertical = 8.dp)
+			) {
+				IconButton(onClick = { isListView = !isListView }) {
+					Icon(
+						imageVector = if (isListView) Icons.Default.GridView else Icons.AutoMirrored.Filled.ViewList,
+						contentDescription = "Toggle View",
+						tint = MaterialTheme.colorScheme.onBackground
+					)
+				}
+			}
 
 			if (notesList.isEmpty()) {
 				Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 					Text("No hay notas disponibles", color = Color.Gray)
 				}
 			} else {
-				val groupedNotes =
-					notesList.groupBy { getDayNumber(it.timestamp) + getMonthName(it.timestamp) }
+				if (isListView) {
+					// VISTA DE LISTA (La original)
+					val groupedNotes =
+						notesList.groupBy { getDayNumber(it.timestamp) + getMonthName(it.timestamp) }
 
-				LazyColumn(
-					modifier = Modifier.fillMaxSize(),
-					contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
-				) {
-					items(groupedNotes.entries.toList()) { (key, notesOfDay) ->
-						val isFirst = groupedNotes.keys.firstOrNull() == key
-						HomeNoteItem(
-							notes = notesOfDay,
-							isToday = isFirst,
-							onClick = { note ->
-								navController.navigate("edit_note?noteId=${note.id}")
-							},
-							onLongClick = { note ->
-								noteToDelete = note
-								showDeleteDialog.value = true
+					LazyColumn(
+						modifier = Modifier.fillMaxSize(),
+						contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
+					) {
+						items(groupedNotes.entries.toList()) { (key, notesOfDay) ->
+							val isFirst = groupedNotes.keys.firstOrNull() == key
+							HomeNoteItem(
+								notes = notesOfDay,
+								isToday = isFirst,
+								onClick = { note ->
+									navController.navigate("edit_note?noteId=${note.id}")
+								},
+								onLongClick = { note ->
+									noteToDelete = note
+									showDeleteDialog.value = true
+								}
+							)
+							HorizontalDivider(
+								modifier = Modifier.padding(start = 104.dp, end = 24.dp, top = 8.dp, bottom = 8.dp),
+								thickness = 1.dp,
+								color = Color.LightGray.copy(alpha = 0.4f)
+							)
+						}
+					}
+				} else {
+					// VISTA DE GRID (Nueva)
+					LazyVerticalGrid(
+						columns = GridCells.Fixed(2), // 2 columnas
+						modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+						contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
+					) {
+						items(notesList) { note ->
+							// Usamos el SimpleNoteItem que es ideal para grids
+							Box(modifier = Modifier.padding(8.dp)) {
+								SimpleNoteItem(
+									note = note,
+									onClick = {
+										navController.navigate("edit_note?noteId=${note.id}")
+									}
+								)
 							}
-						)
-						HorizontalDivider(
-							modifier = Modifier.padding(start = 104.dp, end = 24.dp, top = 8.dp, bottom = 8.dp),
-							thickness = 1.dp,
-							color = Color.LightGray.copy(alpha = 0.4f)
-						)
+						}
 					}
 				}
 			}

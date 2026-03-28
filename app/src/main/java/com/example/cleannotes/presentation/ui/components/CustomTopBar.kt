@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ViewList
 import androidx.compose.material.icons.automirrored.outlined.StickyNote2
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,7 +28,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun CustomTopBar(navController: NavController) {
+fun CustomTopBar(
+	navController: NavController,
+	isListView: Boolean? = null,
+	onToggleView: (() -> Unit)? = null
+) {
 	Surface(
 		modifier = Modifier.fillMaxWidth(),
 		color = MaterialTheme.colorScheme.background,
@@ -61,17 +68,30 @@ fun CustomTopBar(navController: NavController) {
 					)
 				}
 
-				// Icono de configuración a la derecha
-				Icon(
-					imageVector = Icons.Default.Settings,
-					contentDescription = "Settings",
-					tint = MaterialTheme.colorScheme.onSurfaceVariant,
-					modifier = Modifier
-						.size(24.dp)
-						.clickable {
-							navController.navigate("settings_screen")
+				// Acciones (Botones de vista) y Configuración a la derecha
+				Row(verticalAlignment = Alignment.CenterVertically) {
+					if (isListView != null && onToggleView != null) {
+						IconButton(onClick = onToggleView) {
+							Icon(
+								imageVector = if (isListView) Icons.Default.GridView else Icons.AutoMirrored.Filled.ViewList,
+								contentDescription = "Toggle View",
+								tint = MaterialTheme.colorScheme.onSurfaceVariant
+							)
 						}
-				)
+						Spacer(modifier = Modifier.width(8.dp))
+					}
+
+					Icon(
+						imageVector = Icons.Default.Settings,
+						contentDescription = "Settings",
+						tint = MaterialTheme.colorScheme.onSurfaceVariant,
+						modifier = Modifier
+							.size(24.dp)
+							.clickable {
+								navController.navigate("settings_screen")
+							}
+					)
+				}
 			}
 		}
 	}
