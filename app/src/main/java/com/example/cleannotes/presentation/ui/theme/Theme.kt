@@ -17,26 +17,26 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-	primary = SoftSage,
-	secondary = MediumGray,
-	tertiary = WarmGray,
+	primary = MainBlueDark,
+	secondary = DarkBlueAccentDark,
+	tertiary = LightBlueBG,
 	background = NearBlackBG,
-	surface = NearBlackBG,
+	surface = DarkSurface,
 	onPrimary = NearBlackBG,
 	onSecondary = OffWhiteText,
-	onTertiary = OffWhiteText,
+	onTertiary = DarkCharcoalText,
 	onBackground = OffWhiteText,
 	onSurface = OffWhiteText
 )
 
 private val LightColorScheme = lightColorScheme(
-	primary = SoftSageL,
-	secondary = StoneGray,
-	tertiary = MutedClay,
+	primary = MainBlue,
+	secondary = DarkBlueAccent,
+	tertiary = LightBlueBG,
 	background = OffWhiteBG,
-	surface = OffWhiteBG,
-	onPrimary = Color.White,
-	onSecondary = DarkCharcoalText,
+	surface = Color.White,
+	onPrimary = DarkCharcoalText, // Provides contrast against MainBlue (e.g. inside FAB)
+	onSecondary = Color.White,
 	onTertiary = DarkCharcoalText,
 	onBackground = DarkCharcoalText,
 	onSurface = DarkCharcoalText
@@ -46,7 +46,7 @@ private val LightColorScheme = lightColorScheme(
 fun CleanNotesTheme(
 	darkTheme: Boolean = isSystemInDarkTheme(),
 	// Dynamic color is available on Android 12+
-	dynamicColor: Boolean = false, // Disabled to enforce the custom theme
+	dynamicColor: Boolean = false, // Disabled to enforce the custom theme colors
 	content: @Composable () -> Unit
 ) {
 	val colorScheme = when {

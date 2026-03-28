@@ -38,6 +38,11 @@ class EditNoteViewModel @Inject constructor(
 	private var saveJob: Job? = null
 	
 	init {
+		val isReminder = savedStateHandle.get<Boolean>("isReminder") ?: false
+		if (isReminder) {
+			_noteContent.value = "Remember"
+		}
+
 		savedStateHandle.get<Int>("noteId")?.let { noteId ->
 			if (noteId != -1) {
 				viewModelScope.launch {

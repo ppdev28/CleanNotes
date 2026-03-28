@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.example.cleannotes.presentation.ui.edit_note.EditNoteScreen
 import com.example.cleannotes.presentation.ui.all_notes.AllNotesScreen
 import com.example.cleannotes.presentation.ui.all_reminders.AllRemindersScreen
+import com.example.cleannotes.presentation.ui.search.SearchScreen
 import com.example.cleannotes.presentation.ui.settings.SettingsScreen
 import com.example.cleannotes.presentation.ui.theme.CleanNotesTheme
 import com.example.cleannotes.presentation.ui.home.HomeScreen
@@ -42,19 +43,27 @@ class MainActivity : ComponentActivity() {
 						composable(route = "all_reminders_screen") {
 							AllRemindersScreen(navController = navController)
 						}
+						// Search Screen
+						composable(route = "search_screen") {
+							SearchScreen(navController = navController)
+						}
 						// Settings Screen
 						composable(route = "settings_screen") {
 							SettingsScreen(navController = navController)
 						}
 
 						// Pantalla Añadir/Editar
-						// Aceptamos un argumento opcional ?noteId={noteId}
+						// Aceptamos argumentos opcionales
 						composable(
-							route = "edit_note?noteId={noteId}",
+							route = "edit_note?noteId={noteId}&isReminder={isReminder}",
 							arguments = listOf(
 								navArgument(name = "noteId") {
 									type = NavType.IntType
 									defaultValue = -1
+								},
+								navArgument(name = "isReminder") {
+									type = NavType.BoolType
+									defaultValue = false
 								}
 							)
 						) {
